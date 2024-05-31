@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>GenericNotification.Domain</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="DTO\" />
+      <Folder Include="Enum\" />
+      <Folder Include="Results\" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Configurations\" />
+      <Folder Include="DependencyInjection\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.4.24267.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-preview.4.24266.19" />
+      <PackageReference Include="Npgsql" Version="8.0.3" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0-preview.3" />
+    </ItemGroup>
+
+</Project>
