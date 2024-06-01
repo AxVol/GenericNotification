@@ -7,6 +7,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>GenericNotification</RootNamespace>
+        <UserSecretsId>2d71708e-739d-40c3-a831-b756edc8555a</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,11 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GenericNotification.DAL\GenericNotification.DAL.csproj" />
+      <ProjectReference Include="..\GenericNotification.Domain\GenericNotification.Domain.csproj" />
     </ItemGroup>
 
 </Project>
