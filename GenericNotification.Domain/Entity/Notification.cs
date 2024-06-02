@@ -9,6 +9,6 @@ public class Notification : IEntityId<long>
     public string Body { get; set; }
     public DateTime TimeToSend { get; set; }
     public bool IsSend { get; set; }
-    public Queue<UserNotificationStatus> ForUsers { get; set; }
+    public Queue<NotificationStatus> ForUsers { get; set; }
     public string CreatorName { get; set; }
 }

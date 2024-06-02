@@ -12,6 +12,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
@@ -22,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GenericNotification.Application\GenericNotification.Application.csproj" />
       <ProjectReference Include="..\GenericNotification.DAL\GenericNotification.DAL.csproj" />
       <ProjectReference Include="..\GenericNotification.Domain\GenericNotification.Domain.csproj" />
     </ItemGroup>

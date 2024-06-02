@@ -1,3 +1,4 @@
+using GenericNotification.Application.DependencyInjection;
 using GenericNotification.DAL.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
+builder.Services.AddServices();
 
 var app = builder.Build();
 
