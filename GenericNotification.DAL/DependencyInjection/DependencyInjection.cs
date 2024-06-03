@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GenericNotification.DAL.Repository;
+using GenericNotification.Domain.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
@@ -15,6 +17,8 @@ public static class DependencyInjection
             options.UseNpgsql(connectionString);
             options.EnableSensitiveDataLogging();
         });
+        serviceCollection.AddScoped<IRepository<Notification>, NotificationRepository>();
+        serviceCollection.AddScoped<IRepository<NotificationStatus>, NotificationStatusRepository>();
 
         return serviceCollection;
     }

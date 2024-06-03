@@ -9,6 +9,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddServices();
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "../Core/Resources");
 
 var app = builder.Build();
 

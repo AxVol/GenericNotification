@@ -12,6 +12,8 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> contextOptions) : base(contextOptions)
     {
         Database.EnsureCreated(); 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
