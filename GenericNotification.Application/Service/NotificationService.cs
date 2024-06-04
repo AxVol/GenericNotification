@@ -1,6 +1,8 @@
-﻿namespace GenericNotification.Application.Service;
+﻿using GenericNotification.Application.Interfaces;
 
-public class NotificationService
+namespace GenericNotification.Application.Service;
+
+public class NotificationService : INotificationService
 {
     
 }
