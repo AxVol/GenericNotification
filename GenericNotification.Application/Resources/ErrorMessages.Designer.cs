@@ -94,5 +94,14 @@ namespace GenericNotification.Application.Resources {
                 return ResourceManager.GetString("WrongDateError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не корректная почта автора нотификации.
+        /// </summary>
+        internal static string WrongEmailError {
+            get {
+                return ResourceManager.GetString("WrongEmailError", resourceCulture);
+            }
+        }
     }
 }

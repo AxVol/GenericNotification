@@ -3,6 +3,5 @@
 public enum ResponseStatus
 {
     Error,
-    Success,
-    FileExtensionError
+    Success
 }

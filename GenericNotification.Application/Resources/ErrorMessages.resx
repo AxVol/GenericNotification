@@ -30,4 +30,7 @@
     <data name="SendersError" xml:space="preserve">
         <value>Отсутствует список людей для отправки уведомлений</value>
     </data>
+    <data name="WrongEmailError" xml:space="preserve">
+        <value>Не корректная почта автора нотификации</value>
+    </data>
 </root>
