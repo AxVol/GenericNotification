@@ -13,6 +13,8 @@ public class NotificationDto
     public DateTime TimeToSend { get; set; }
     [Required]
     public string SenderEmail { get; set; }
+    [Required]
+    public string NotificationText { get; set; }
     public string Body { get; set; }
     public IFormFile File { get; set; }
 }

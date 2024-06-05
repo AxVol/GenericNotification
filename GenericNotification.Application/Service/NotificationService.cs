@@ -4,22 +4,52 @@ using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
+using GenericNotification.Domain.Entity;
 
 namespace GenericNotification.Application.Service;
 
 public class NotificationService : INotificationService
 {
     private readonly IStringLocalizer<Resources.Resources> localizationMessages;
+    private readonly IParser parserService;
 
-    public NotificationService(IStringLocalizer<Resources.Resources> localizer)
+    public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser)
     {
         localizationMessages = localizer;
+        parserService = parser;
     }
     
     public NotificationResponse CreateNotification(NotificationDto notificationDto)
     {
         NotificationResponse notificationResponse = NotificationValidate(notificationDto);
         
+        if (notificationResponse.Status == ResponseStatus.Error)
+        {
+            return notificationResponse;
+        }
+        
+        Queue<NotificationStatus> notificationStatus;
+        Notification notification = new Notification()
+        {
+            Title = notificationDto.Title,
+            TimeToSend = notificationDto.TimeToSend,
+            Body = notificationDto.NotificationText,
+            IsSend = false,
+            CreatorName = notificationDto.SenderEmail
+        };
+        
+        if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
+        { 
+            notificationStatus = parserService.Parse(notificationDto.File);
+        }
+        else
+        {
+            notificationStatus = parserService.Parse(notificationDto.Body);
+        }
+
+        notification.ForUsers = notificationStatus;
+        notificationResponse.Value = notification;
+
         return notificationResponse;
     }
 
