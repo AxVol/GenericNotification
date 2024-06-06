@@ -92,10 +92,7 @@ public class NotificationService : INotificationService
             }
             else
             {
-                if (notificationDto.File.ContentType == "application/vnd.ms-excel" 
-                    || notificationDto.File.ContentType == "application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    || notificationDto.File.ContentType == "text/csv"
-                    || notificationDto.File.ContentType == "application/csv")
+                if (parserService.FileExtensions.ContainsKey(notificationDto.File.ContentType))
                 {
                     notificationResponse.Status = ResponseStatus.Success;
 

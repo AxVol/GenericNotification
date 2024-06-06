@@ -1,8 +1,8 @@
 ﻿using GenericNotification.Application.Interfaces;
-using GenericNotification.Application.Resources;
 using GenericNotification.Domain.DTO;
+using GenericNotification.Domain.Enum;
+using GenericNotification.Domain.Response;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 
 namespace GenericNotification.Controllers;
 
@@ -11,10 +11,12 @@ namespace GenericNotification.Controllers;
 public class NotificationController : ControllerBase
 {
     private readonly INotificationService notificationService;
-    
-    public NotificationController(INotificationService service)
+    private readonly ILogger<NotificationController> logger;
+
+    public NotificationController(INotificationService service, ILogger<NotificationController> log)
     {
         notificationService = service;
+        logger = log;
     }
     
     /// <remarks>
@@ -36,8 +38,19 @@ public class NotificationController : ControllerBase
     [HttpPost]
     public JsonResult Post(NotificationDto notification)
     {
-        
-        
-        return new JsonResult("");
+        NotificationResponse notificationResponse = notificationService.CreateNotification(notification);
+
+        if (notificationResponse.Status == ResponseStatus.Success)
+        {
+            logger.LogInformation(notificationResponse.Status.ToString());
+            return new JsonResult(notificationResponse.Value);
+        }
+        else
+        {
+            logger.LogError(notificationResponse.Status.ToString());
+            logger.LogInformation(notificationResponse.Message);
+
+            return new JsonResult(notificationResponse.Message);
+        }
     }
 }
