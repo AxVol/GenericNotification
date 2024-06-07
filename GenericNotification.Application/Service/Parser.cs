@@ -1,4 +1,5 @@
-﻿using GenericNotification.Application.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using GenericNotification.Application.Interfaces;
 using GenericNotification.Domain.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
@@ -24,7 +25,7 @@ public class Parser : IParser
         localizer = stringLocalizer;
     }
 
-    public Queue<NotificationStatus> Parse(IFormFile file)
+    public Queue<NotificationStatus> Parse(IFormFile file, Notification notification)
     {
         Queue<NotificationStatus> notificationStatus;
         string fileType = FileExtensions[file.ContentType];
@@ -34,12 +35,12 @@ public class Parser : IParser
         {
             case "excel":
             {
-                notificationStatus = ExcelParse(stream);
+                notificationStatus = ExcelParse(stream, notification);
                 break;
             }
             case "csv":
             {
-                notificationStatus = CsvParse(stream);
+                notificationStatus = CsvParse(stream, notification);
                 break;
             }
             default:
@@ -51,17 +52,46 @@ public class Parser : IParser
         return notificationStatus;
     }
 
-    public Queue<NotificationStatus> Parse(string text)
+    public Queue<NotificationStatus> Parse(string text, Notification notification)
     {
         throw new NotImplementedException();
     }
 
-    private Queue<NotificationStatus> CsvParse(Stream stream)
+    private Queue<NotificationStatus> CsvParse(Stream stream, Notification notification)
     {
-        throw new NotImplementedException();
+        Queue<NotificationStatus> notificationQueue = new Queue<NotificationStatus>();
+        using (StreamReader streamReader = new StreamReader(stream))
+        {
+            string line = streamReader.ReadToEnd();
+            string[] parts = line.Split(',');
+            //TODO: Распаралелить
+            for (int i = 0; i < parts.Length - 1; i++)
+            {
+                string current = parts[i];
+                bool isEmail = new EmailAddressAttribute().IsValid(current);
+
+                if (isEmail)
+                {
+                    NotificationStatus notificationStatus = new NotificationStatus()
+                    {
+                        Email = current,
+                        SendStatus = false,
+                        Notification = notification,
+                        
+                    };
+                    notificationQueue.Enqueue(notificationStatus);
+                }
+                else
+                {
+                    throw new ArgumentException(localizer["FileParseError"]);
+                }
+            }
+        }
+
+        return notificationQueue;
     }
 
-    private Queue<NotificationStatus> ExcelParse(Stream stream)
+    private Queue<NotificationStatus> ExcelParse(Stream stream, Notification notification)
     {
         throw new NotImplementedException();
     }

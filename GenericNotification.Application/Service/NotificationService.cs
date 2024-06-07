@@ -5,6 +5,7 @@ using GenericNotification.Domain.Response;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 using GenericNotification.Domain.Entity;
+using Microsoft.Extensions.Logging;
 
 namespace GenericNotification.Application.Service;
 
@@ -12,11 +13,14 @@ public class NotificationService : INotificationService
 {
     private readonly IStringLocalizer<Resources.Resources> localizationMessages;
     private readonly IParser parserService;
+    private readonly ILogger<NotificationService> logger;
 
-    public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser)
+    public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser, 
+        ILogger<NotificationService> log)
     {
         localizationMessages = localizer;
         parserService = parser;
+        logger = log;
     }
     
     public NotificationResponse CreateNotification(NotificationDto notificationDto)
@@ -37,14 +41,26 @@ public class NotificationService : INotificationService
             IsSend = false,
             CreatorName = notificationDto.SenderEmail
         };
-        
-        if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
-        { 
-            notificationStatus = parserService.Parse(notificationDto.File);
-        }
-        else
+
+        try
         {
-            notificationStatus = parserService.Parse(notificationDto.Body);
+            if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
+            { 
+                notificationStatus = parserService.Parse(notificationDto.File, notification);
+            }
+            else
+            {
+                notificationStatus = parserService.Parse(notificationDto.Body, notification);
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            logger.LogError(ex.Message);
+
+            notificationResponse.Status = ResponseStatus.Error;
+            notificationResponse.Message = ex.Message;
+
+            return notificationResponse;
         }
 
         notification.ForUsers = notificationStatus;

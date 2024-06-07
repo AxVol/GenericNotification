@@ -7,6 +7,6 @@ public interface IParser
 {
     public Dictionary<string, string> FileExtensions { get; }
 
-    public Queue<NotificationStatus> Parse(IFormFile file);
-    public Queue<NotificationStatus> Parse(string text);
+    public Queue<NotificationStatus> Parse(IFormFile file, Notification notification);
+    public Queue<NotificationStatus> Parse(string text, Notification notification);
 }
