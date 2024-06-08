@@ -36,9 +36,9 @@ public class NotificationController : ControllerBase
     /// <response code="200">Данные успешно отправлены</response>
     /// <response code="400">Для большей инофрмации об ошибке, смотрите описание ошибки в json файле</response>
     [HttpPost]
-    public JsonResult Post(NotificationDto notification)
+    public async Task<JsonResult> Post(NotificationDto notification)
     {
-        NotificationResponse notificationResponse = notificationService.CreateNotification(notification);
+        NotificationResponse notificationResponse = await notificationService.CreateNotificationAsync(notification);
 
         if (notificationResponse.Status == ResponseStatus.Success)
         {

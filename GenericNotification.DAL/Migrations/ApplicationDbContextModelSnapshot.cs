@@ -63,13 +63,13 @@ namespace GenericNotification.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("NotificationId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("character varying(12)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<long?>("NotificationId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("SendStatus")
                         .HasColumnType("boolean");
@@ -83,13 +83,9 @@ namespace GenericNotification.DAL.Migrations
 
             modelBuilder.Entity("GenericNotification.Domain.Entity.NotificationStatus", b =>
                 {
-                    b.HasOne("GenericNotification.Domain.Entity.Notification", "Notification")
+                    b.HasOne("GenericNotification.Domain.Entity.Notification", null)
                         .WithMany("ForUsers")
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notification");
+                        .HasForeignKey("NotificationId");
                 });
 
             modelBuilder.Entity("GenericNotification.Domain.Entity.Notification", b =>

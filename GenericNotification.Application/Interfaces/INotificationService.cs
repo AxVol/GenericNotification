@@ -5,5 +5,5 @@ namespace GenericNotification.Application.Interfaces;
 
 public interface INotificationService
 {
-    public NotificationResponse CreateNotification(NotificationDto notificationDto);
+    public Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto);
 }

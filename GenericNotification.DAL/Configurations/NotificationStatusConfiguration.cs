@@ -11,8 +11,5 @@ public class NotificationStatusConfiguration : IEntityTypeConfiguration<Notifica
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.SendStatus).IsRequired();
-        builder.HasOne<Notification>(x => x.Notification)
-            .WithMany(x => x.ForUsers)
-            .HasForeignKey(x => x.NotificationId);
     }
 }

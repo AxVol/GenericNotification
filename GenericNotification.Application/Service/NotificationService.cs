@@ -23,7 +23,7 @@ public class NotificationService : INotificationService
         logger = log;
     }
     
-    public NotificationResponse CreateNotification(NotificationDto notificationDto)
+    public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)
     {
         NotificationResponse notificationResponse = NotificationValidate(notificationDto);
         
@@ -46,11 +46,11 @@ public class NotificationService : INotificationService
         {
             if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
             { 
-                notificationStatus = parserService.Parse(notificationDto.File, notification);
+                notificationStatus = await parserService.ParseAsync(notificationDto.File);
             }
             else
             {
-                notificationStatus = parserService.Parse(notificationDto.Body, notification);
+                notificationStatus = await parserService.ParseAsync(notificationDto.Body);
             }
         }
         catch (ArgumentException ex)

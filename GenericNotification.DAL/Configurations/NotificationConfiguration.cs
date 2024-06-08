@@ -14,9 +14,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
         builder.Property(x => x.CreatorName).IsRequired();
         builder.Property(x => x.TimeToSend).IsRequired();
         builder.Property(x => x.IsSend).IsRequired();
-        builder.HasMany<NotificationStatus>(x => x.ForUsers)
-            .WithOne(x => x.Notification)
-            .HasForeignKey(x => x.NotificationId);  
+        builder.HasMany<NotificationStatus>(x => x.ForUsers);
 
     }
 }

@@ -25,7 +25,7 @@ public class Parser : IParser
         localizer = stringLocalizer;
     }
 
-    public Queue<NotificationStatus> Parse(IFormFile file, Notification notification)
+    public async Task<Queue<NotificationStatus>> ParseAsync(IFormFile file)
     {
         Queue<NotificationStatus> notificationStatus;
         string fileType = FileExtensions[file.ContentType];
@@ -35,12 +35,12 @@ public class Parser : IParser
         {
             case "excel":
             {
-                notificationStatus = ExcelParse(stream, notification);
+                notificationStatus = ExcelParse(stream);
                 break;
             }
             case "csv":
             {
-                notificationStatus = CsvParse(stream, notification);
+                notificationStatus = await CsvParse(stream);
                 break;
             }
             default:
@@ -52,22 +52,21 @@ public class Parser : IParser
         return notificationStatus;
     }
 
-    public Queue<NotificationStatus> Parse(string text, Notification notification)
+    public Task<Queue<NotificationStatus>> ParseAsync(string text)
     {
         throw new NotImplementedException();
     }
 
-    private Queue<NotificationStatus> CsvParse(Stream stream, Notification notification)
+    private Task<Queue<NotificationStatus>> CsvParse(Stream stream)
     {
         Queue<NotificationStatus> notificationQueue = new Queue<NotificationStatus>();
         using (StreamReader streamReader = new StreamReader(stream))
         {
             string line = streamReader.ReadToEnd();
             string[] parts = line.Split(',');
-            //TODO: Распаралелить
-            for (int i = 0; i < parts.Length - 1; i++)
+
+            Parallel.ForEach(parts, current =>
             {
-                string current = parts[i];
                 bool isEmail = new EmailAddressAttribute().IsValid(current);
 
                 if (isEmail)
@@ -76,8 +75,6 @@ public class Parser : IParser
                     {
                         Email = current,
                         SendStatus = false,
-                        Notification = notification,
-                        
                     };
                     notificationQueue.Enqueue(notificationStatus);
                 }
@@ -85,13 +82,13 @@ public class Parser : IParser
                 {
                     throw new ArgumentException(localizer["FileParseError"]);
                 }
-            }
+            });
         }
 
-        return notificationQueue;
+        return Task.FromResult(notificationQueue);
     }
 
-    private Queue<NotificationStatus> ExcelParse(Stream stream, Notification notification)
+    private Queue<NotificationStatus> ExcelParse(Stream stream)
     {
         throw new NotImplementedException();
     }
