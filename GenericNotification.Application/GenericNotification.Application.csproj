@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GenericNotification.DAL\GenericNotification.DAL.csproj" />
       <ProjectReference Include="..\GenericNotification.Domain\GenericNotification.Domain.csproj" />
     </ItemGroup>
 

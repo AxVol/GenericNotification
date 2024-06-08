@@ -25,7 +25,7 @@ public class Parser : IParser
         localizer = stringLocalizer;
     }
 
-    public async Task<Queue<NotificationStatus>> ParseAsync(IFormFile file)
+    public Queue<NotificationStatus> Parse(IFormFile file)
     {
         Queue<NotificationStatus> notificationStatus;
         string fileType = FileExtensions[file.ContentType];
@@ -40,7 +40,7 @@ public class Parser : IParser
             }
             case "csv":
             {
-                notificationStatus = await CsvParse(stream);
+                notificationStatus = CsvParse(stream);
                 break;
             }
             default:
@@ -52,12 +52,12 @@ public class Parser : IParser
         return notificationStatus;
     }
 
-    public Task<Queue<NotificationStatus>> ParseAsync(string text)
+    public Queue<NotificationStatus> Parse(string text)
     {
         throw new NotImplementedException();
     }
 
-    private Task<Queue<NotificationStatus>> CsvParse(Stream stream)
+    private Queue<NotificationStatus> CsvParse(Stream stream)
     {
         Queue<NotificationStatus> notificationQueue = new Queue<NotificationStatus>();
         using (StreamReader streamReader = new StreamReader(stream))
@@ -85,7 +85,7 @@ public class Parser : IParser
             });
         }
 
-        return Task.FromResult(notificationQueue);
+        return notificationQueue;
     }
 
     private Queue<NotificationStatus> ExcelParse(Stream stream)

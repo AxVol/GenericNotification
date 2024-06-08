@@ -4,6 +4,7 @@ using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
+using GenericNotification.DAL.Repository;
 using GenericNotification.Domain.Entity;
 using Microsoft.Extensions.Logging;
 
@@ -14,13 +15,15 @@ public class NotificationService : INotificationService
     private readonly IStringLocalizer<Resources.Resources> localizationMessages;
     private readonly IParser parserService;
     private readonly ILogger<NotificationService> logger;
+    private readonly IRepository<Notification> repository;
 
     public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser, 
-        ILogger<NotificationService> log)
+        ILogger<NotificationService> log, IRepository<Notification> rep)
     {
         localizationMessages = localizer;
         parserService = parser;
         logger = log;
+        repository = rep;
     }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)
@@ -46,11 +49,11 @@ public class NotificationService : INotificationService
         {
             if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
             { 
-                notificationStatus = await parserService.ParseAsync(notificationDto.File);
+                notificationStatus = parserService.Parse(notificationDto.File);
             }
             else
             {
-                notificationStatus = await parserService.ParseAsync(notificationDto.Body);
+                notificationStatus = parserService.Parse(notificationDto.Body);
             }
         }
         catch (ArgumentException ex)
@@ -66,6 +69,8 @@ public class NotificationService : INotificationService
         notification.ForUsers = notificationStatus;
         notificationResponse.Value = notification;
 
+        await repository.Create(notification);
+        
         return notificationResponse;
     }
 
