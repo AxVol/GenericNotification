@@ -100,15 +100,7 @@ public class Parser : IParser
                     for (int i = 1; i < rowCount; i++)
                     {
                         string current = worksheet.Cells[i, columnCount].Value.ToString();
-
-                        if (current == null)
-                        {
-                            throw new ArgumentException(localizer["FileParseError"]);
-                        }
-                        else
-                        {
-                            emails.Add(current);
-                        }
+                        emails.Add(current);
                     }
                 }
                 // Парсит только первую ячейку всех столбцов
@@ -117,15 +109,7 @@ public class Parser : IParser
                     for (int i = 1; i < columnCount; i++)
                     {
                         string current = worksheet.Cells[rowCount, i].Value.ToString();
-
-                        if (current == null)
-                        {
-                            throw new ArgumentException(localizer["FileParseError"]);
-                        }
-                        else
-                        {
-                            emails.Add(current);
-                        }
+                        emails.Add(current);
                     }
                 }
                 else
@@ -141,15 +125,7 @@ public class Parser : IParser
                     for (int column = 1; column <= columnCount; column++)
                     {
                         string current = worksheet.Cells[row, column].Value.ToString();
-
-                        if (current == null)
-                        {
-                            throw new ArgumentException(localizer["FileParseError"]);
-                        }
-                        else
-                        {
-                            emails.Add(current);
-                        }
+                        emails.Add(current);
                     }
                 }
             }

@@ -25,6 +25,11 @@ public class NotificationService : INotificationService
         logger = log;
         repository = rep;
     }
+
+    public async Task SendNotificationAsync(Notification notification)
+    {
+        throw new NotImplementedException();
+    }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)
     {
@@ -48,7 +53,7 @@ public class NotificationService : INotificationService
         try
         {
             if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
-            { 
+            {
                 notificationStatus = parserService.Parse(notificationDto.File);
             }
             else
@@ -62,6 +67,15 @@ public class NotificationService : INotificationService
 
             notificationResponse.Status = ResponseStatus.Error;
             notificationResponse.Message = ex.Message;
+
+            return notificationResponse;
+        }
+        catch (NullReferenceException ex)
+        {
+            logger.LogError(ex.Message);
+
+            notificationResponse.Status = ResponseStatus.Error;
+            notificationResponse.Message = localizationMessages["FileParseError"];
 
             return notificationResponse;
         }

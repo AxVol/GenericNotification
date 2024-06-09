@@ -2,6 +2,7 @@
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericNotification.Controllers;
@@ -48,6 +49,8 @@ public class NotificationController : ControllerBase
             return new JsonResult(notificationResponse.Message);
         }
 
-        return new JsonResult("");
+        await notificationService.SendNotificationAsync(notificationResponse.Value);
+
+        return new JsonResult(notificationResponse.Status.ToString());
     }
 }
