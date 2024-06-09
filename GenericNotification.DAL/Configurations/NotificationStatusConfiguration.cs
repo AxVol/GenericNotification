@@ -8,7 +8,7 @@ public class NotificationStatusConfiguration : IEntityTypeConfiguration<Notifica
 {
     public void Configure(EntityTypeBuilder<NotificationStatus> builder)
     {
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property<Guid>(x => x.Id).IsRequired();
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.SendStatus).IsRequired();
     }

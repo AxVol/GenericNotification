@@ -24,11 +24,9 @@ namespace GenericNotification.DAL.Migrations
 
             modelBuilder.Entity("GenericNotification.Domain.Entity.Notification", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<long>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -57,19 +55,17 @@ namespace GenericNotification.DAL.Migrations
 
             modelBuilder.Entity("GenericNotification.Domain.Entity.NotificationStatus", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<long>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<long?>("NotificationId")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("NotificationId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("SendStatus")
                         .HasColumnType("boolean");

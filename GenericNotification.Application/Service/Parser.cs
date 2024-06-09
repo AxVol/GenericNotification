@@ -15,7 +15,7 @@ public class Parser : IParser
         get => new Dictionary<string, string>()
         {
             {"application/vnd.ms-excel", "excel"},
-            {"application/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "excel"},
+            {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "excel"},
             {"application/csv", "csv"},
             {"text/csv", "csv"}
         };
@@ -55,7 +55,10 @@ public class Parser : IParser
 
     public Queue<NotificationStatus> Parse(string text)
     {
-        throw new NotImplementedException();
+        List<string> parts = text.Split(' ').ToList();
+        Queue<NotificationStatus> notificationQueue = GetEmails(parts);
+
+        return notificationQueue;
     }
 
     private Queue<NotificationStatus> CsvParse(Stream stream)
@@ -76,15 +79,15 @@ public class Parser : IParser
     {
         Queue<NotificationStatus> notificationQueue;
         List<string> emails = new List<string>();
-        
+
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         using (ExcelPackage package = new ExcelPackage(stream))
         {
-            ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
             int columnCount = worksheet.Dimension.End.Column;
             int rowCount = worksheet.Dimension.End.Row;
             
             if (columnCount == 0 && rowCount == 0) throw new ArgumentException(localizer["FileParseError"]);
-            if (worksheet.Cells[1, 1] == null) throw new ArgumentException(localizer["FileParseError"]);
 
             /*
              * Проверяет то, как данные расположены внутри таблички, отслеживаются 3 состояния
@@ -92,12 +95,12 @@ public class Parser : IParser
              * 2 - Когда данные расположены только в первом столбце
              * 3 - Когда данные расположены в виде полноценной таблицы
              */
-            if (worksheet.Cells[2, 2] == null)
+            if (worksheet.Cells[2, 2].Value == null)
             {
                 // Парсит только первый столбец
                 if (columnCount == 1)
                 {
-                    for (int i = 1; i < rowCount; i++)
+                    for (int i = 1; i <= rowCount; i++)
                     {
                         string current = worksheet.Cells[i, columnCount].Value.ToString();
                         emails.Add(current);
@@ -106,7 +109,7 @@ public class Parser : IParser
                 // Парсит только первую ячейку всех столбцов
                 else if (rowCount == 1)
                 {
-                    for (int i = 1; i < columnCount; i++)
+                    for (int i = 1; i <= columnCount; i++)
                     {
                         string current = worksheet.Cells[rowCount, i].Value.ToString();
                         emails.Add(current);
@@ -148,6 +151,7 @@ public class Parser : IParser
             {
                 NotificationStatus notificationStatus = new NotificationStatus()
                 {
+                    Id = Guid.NewGuid(),
                     Email = current,
                     SendStatus = false,
                 };

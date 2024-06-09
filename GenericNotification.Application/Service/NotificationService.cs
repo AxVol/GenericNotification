@@ -43,6 +43,7 @@ public class NotificationService : INotificationService
         Queue<NotificationStatus> notificationStatus;
         Notification notification = new Notification()
         {
+            Id = Guid.NewGuid(),
             Title = notificationDto.Title,
             TimeToSend = notificationDto.TimeToSend,
             Body = notificationDto.NotificationText,
@@ -83,7 +84,7 @@ public class NotificationService : INotificationService
         notification.ForUsers = notificationStatus;
         notificationResponse.Value = notification;
 
-        await repository.Create(notification);
+       await repository.Create(notification);
         
         return notificationResponse;
     }

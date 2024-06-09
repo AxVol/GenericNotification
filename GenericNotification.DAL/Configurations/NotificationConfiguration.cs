@@ -8,7 +8,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
 {
     public void Configure(EntityTypeBuilder<Notification> builder)
     {
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property<Guid>(x => x.Id).IsRequired();
         builder.Property(x => x.Title).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Body).IsRequired().HasMaxLength(300);
         builder.Property(x => x.CreatorName).IsRequired();
