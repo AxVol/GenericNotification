@@ -40,17 +40,14 @@ public class NotificationController : ControllerBase
     {
         NotificationResponse notificationResponse = await notificationService.CreateNotificationAsync(notification);
 
-        if (notificationResponse.Status == ResponseStatus.Success)
-        {
-            logger.LogInformation(notificationResponse.Status.ToString());
-            return new JsonResult(notificationResponse.Value);
-        }
-        else
+        if (notificationResponse.Status == ResponseStatus.Error)
         {
             logger.LogError(notificationResponse.Status.ToString());
             logger.LogInformation(notificationResponse.Message);
 
             return new JsonResult(notificationResponse.Message);
         }
+
+        return new JsonResult("");
     }
 }
