@@ -84,7 +84,7 @@ public class NotificationService : INotificationService
         notification.ForUsers = notificationStatus;
         notificationResponse.Value = notification;
 
-       await repository.Create(notification);
+        await repository.Create(notification);
         
         return notificationResponse;
     }
