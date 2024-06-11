@@ -127,8 +127,12 @@ public class Parser : IParser
                 {
                     for (int column = 1; column <= columnCount; column++)
                     {
-                        string current = worksheet.Cells[row, column].Value.ToString();
-                        emails.Add(current);
+                        var current = worksheet.Cells[row, column].Value;
+                        
+                        if (current is null)
+                            continue;
+                        
+                        emails.Add(current.ToString());
                     }
                 }
             }
