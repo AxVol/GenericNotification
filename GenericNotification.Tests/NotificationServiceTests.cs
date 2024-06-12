@@ -50,6 +50,7 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(7, response.Value.ForUsers.Count);
     }
 
     [Fact]
@@ -75,6 +76,7 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(10, response.Value.ForUsers.Count);
     }
     
     [Fact]
@@ -100,6 +102,7 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(10, response.Value.ForUsers.Count);
     }
     
     [Fact]
@@ -125,6 +128,7 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(9, response.Value.ForUsers.Count);
     }
 
     [Fact]
@@ -150,6 +154,7 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(10, response.Value.ForUsers.Count);
     }
 
     [Fact]
@@ -296,5 +301,6 @@ public class NotificationServiceTests
 
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
+        Assert.Equal(20, response.Value.ForUsers.Count);
     }
 }
