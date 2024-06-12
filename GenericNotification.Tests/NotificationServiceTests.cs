@@ -57,7 +57,7 @@ public class NotificationServiceTests
     public async void Create_Correct_With_Horizontal_Excel_Test()
     {
         // Arrage
-        FormFile file = FileUtils.GetFormFile("Files/ExcelHorizontalTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        Task<FormFile> file = FileUtils.GetFormFile("Files/ExcelHorizontalTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         DateTime dateTime = DateTime.Now.AddHours(1);
 
         NotificationDto dto = new NotificationDto()
@@ -68,7 +68,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -83,7 +83,7 @@ public class NotificationServiceTests
     public async void Create_Correct_With_Vertical_Excel_Test()
     {
         // Arrage
-        FormFile file = FileUtils.GetFormFile("Files/ExcelVerticalTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        Task<FormFile>file = FileUtils.GetFormFile("Files/ExcelVerticalTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         DateTime dateTime = DateTime.Now.AddHours(1);
 
         NotificationDto dto = new NotificationDto()
@@ -94,7 +94,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -109,7 +109,7 @@ public class NotificationServiceTests
     public async void Create_Correct_With_Table_Excel_Test()
     {
         // Arrage
-        FormFile file = FileUtils.GetFormFile("Files/ExcelTableTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        Task<FormFile> file = FileUtils.GetFormFile("Files/ExcelTableTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         DateTime dateTime = DateTime.Now.AddHours(1);
 
         NotificationDto dto = new NotificationDto()
@@ -120,7 +120,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -135,7 +135,7 @@ public class NotificationServiceTests
     public async void Create_Correct_With_Csv_Test()
     {
         // Arrage
-        FormFile file = FileUtils.GetFormFile("Files/CsvTest.csv", "application/csv");
+        Task<FormFile> file = FileUtils.GetFormFile("Files/CsvTest.csv", "application/csv");
         DateTime dateTime = DateTime.Now.AddHours(1);
 
         NotificationDto dto = new NotificationDto()
@@ -146,7 +146,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -233,7 +233,7 @@ public class NotificationServiceTests
     public async void Send_Invalid_File_Format_Test()
     {
         // Arrage
-        IFormFile file = FileUtils.GetFormFile("/Files/FormatFileTest.txt", "123");
+        Task<FormFile> file = FileUtils.GetFormFile("/Files/FormatFileTest.txt", "123");
         DateTime dateTime = DateTime.Now.AddHours(1);
         NotificationDto dto = new NotificationDto()
         {
@@ -243,7 +243,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -258,7 +258,7 @@ public class NotificationServiceTests
     public async void File_Parse_Error_Test()
     {
         // Arrage
-        IFormFile file = FileUtils.GetFormFile("/Files/FileParseErrorTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        Task<FormFile> file = FileUtils.GetFormFile("/Files/FileParseErrorTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         DateTime dateTime = DateTime.Now.AddHours(1);
         NotificationDto dto = new NotificationDto()
         {
@@ -268,7 +268,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act
@@ -283,7 +283,7 @@ public class NotificationServiceTests
     public async void File_Parse_Specific_Table_Test()
     {
         // Arrage
-        IFormFile file = FileUtils.GetFormFile("/Files/FileParseSpecificTableTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        Task<FormFile> file = FileUtils.GetFormFile("/Files/FileParseSpecificTableTest.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         DateTime dateTime = DateTime.Now.AddHours(1);
         NotificationDto dto = new NotificationDto()
         {
@@ -293,7 +293,7 @@ public class NotificationServiceTests
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
             Body = null,
-            File = file
+            File = await file
         };
 
         // Act

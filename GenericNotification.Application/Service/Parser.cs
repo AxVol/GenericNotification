@@ -26,9 +26,9 @@ public class Parser : IParser
         localizer = stringLocalizer;
     }
 
-    public Queue<NotificationStatus> Parse(IFormFile file)
+    public List<NotificationStatus> Parse(IFormFile file)
     {
-        Queue<NotificationStatus> notificationStatus;
+        List<NotificationStatus> notificationStatus;
         string fileType = FileExtensions[file.ContentType];
         Stream stream = file.OpenReadStream();
 
@@ -53,31 +53,31 @@ public class Parser : IParser
         return notificationStatus;
     }
 
-    public Queue<NotificationStatus> Parse(string text)
+    public List<NotificationStatus> Parse(string text)
     {
         List<string> parts = text.Split(' ').ToList();
-        Queue<NotificationStatus> notificationQueue = GetEmails(parts);
+        List<NotificationStatus> notificationList = GetEmails(parts);
 
-        return notificationQueue;
+        return notificationList;
     }
 
-    private Queue<NotificationStatus> CsvParse(Stream stream)
+    private List<NotificationStatus> CsvParse(Stream stream)
     {
-        Queue<NotificationStatus> notificationQueue;
+        List<NotificationStatus> notificationList;
         using (StreamReader streamReader = new StreamReader(stream))
         {
             string line = streamReader.ReadToEnd();
             List<string> parts = line.Split(',').ToList();
 
-            notificationQueue = GetEmails(parts);
+            notificationList = GetEmails(parts);
         }
 
-        return notificationQueue;
+        return notificationList;
     }
     // TODO рефакторинг
-    private Queue<NotificationStatus> ExcelParse(Stream stream)
+    private List<NotificationStatus> ExcelParse(Stream stream)
     {
-        Queue<NotificationStatus> notificationQueue;
+        List<NotificationStatus> notificationList;
         List<string> emails = new List<string>();
 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -137,15 +137,15 @@ public class Parser : IParser
                 }
             }
 
-            notificationQueue = GetEmails(emails);
+            notificationList = GetEmails(emails);
         }
 
-        return notificationQueue;
+        return notificationList;
     }
 
-    private Queue<NotificationStatus> GetEmails(List<string> emails)
+    private List<NotificationStatus> GetEmails(List<string> emails)
     {
-        Queue<NotificationStatus> notificationQueue = new Queue<NotificationStatus>();
+        List<NotificationStatus> notificationList = new List<NotificationStatus>();
         
         Parallel.ForEach(emails, current =>
         {
@@ -159,7 +159,7 @@ public class Parser : IParser
                     Email = current,
                     SendStatus = false,
                 };
-                notificationQueue.Enqueue(notificationStatus);
+                notificationList.Add(notificationStatus);
             }
             else
             {
@@ -167,6 +167,6 @@ public class Parser : IParser
             }
         });
 
-        return notificationQueue;
+        return notificationList;
     }
 }

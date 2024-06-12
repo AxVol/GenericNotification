@@ -40,7 +40,7 @@ public class NotificationService : INotificationService
             return notificationResponse;
         }
         
-        Queue<NotificationStatus> notificationStatus;
+        List<NotificationStatus> notificationStatus;
         Notification notification = new Notification()
         {
             Id = Guid.NewGuid(),
