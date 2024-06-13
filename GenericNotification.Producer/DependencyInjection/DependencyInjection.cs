@@ -13,7 +13,7 @@ public static class DependencyInjection
 
         serviceCollection.AddSingleton<IConnectionProvider>(new ConnectionProvider(connectionString));
         serviceCollection.AddScoped<IProducer>(p => new Implementations.Producer(p.GetService<IConnectionProvider>(),
-            ""));
+            "NotificationExchange"));
         
         return serviceCollection;
     }

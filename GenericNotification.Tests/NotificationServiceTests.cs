@@ -6,6 +6,7 @@ using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Entity;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
+using GenericNotification.Producer.Interfaces;
 using GenericNotification.Tests.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
@@ -25,8 +26,9 @@ public class NotificationServiceTests
         IRepository<Notification> repository = Mock.MockFactory<NotificationService>.GetNotificationRepository();
         IParser parser = Mock.MockFactory<NotificationService>.GetParser();
         localizer = Mock.MockFactory<NotificationService>.GetLocalaizer();
+        IProducer rabbit = Mock.MockFactory<NotificationService>.GetRabbitMq();
 
-        notificationService = new NotificationService(localizer, parser, logger, repository);
+        notificationService = new NotificationService(localizer, parser, logger, repository, rabbit);
     }
 
     [Fact]

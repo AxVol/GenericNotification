@@ -5,18 +5,27 @@ namespace GenericNotification.Producer.Implementations;
 
 public class ConnectionProvider : IConnectionProvider
 {
+    private ConnectionFactory factory;
+    private IConnection connection;
+    
     public ConnectionProvider(string connectionString)
     {
-        
+        factory = new ConnectionFactory
+        {
+            Uri = new Uri(connectionString)
+        };
+
+        connection = factory.CreateConnection();
     }
 
     public IConnection GetConnection()
     {
-        throw new NotImplementedException();
+        return connection;
     }
     
     public void Dispose()
     {
-        throw new NotImplementedException();
+        connection.Close();
+        GC.SuppressFinalize(this);
     }
 }

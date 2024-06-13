@@ -3,6 +3,7 @@ using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
 using GenericNotification.DAL.Repository;
 using GenericNotification.Domain.Entity;
+using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -56,5 +57,13 @@ public class MockFactory<T> where T : class
         {
             return instance;
         }
+    }
+
+    public static IProducer GetRabbitMq()
+    {
+        var mock = new Mock<IProducer>();
+        mock.Setup(m => m.Publish("message", "routingKey")).Returns(Task.CompletedTask);
+
+        return mock.Object;
     }
 }

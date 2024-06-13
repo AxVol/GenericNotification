@@ -2,5 +2,5 @@
 
 public interface IProducer : IDisposable
 {
-    void Publish(string message, string routingKey);
+    Task Publish(string message, string routingKey);
 }

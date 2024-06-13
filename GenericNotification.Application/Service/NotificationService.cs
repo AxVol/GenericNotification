@@ -6,6 +6,7 @@ using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 using GenericNotification.DAL.Repository;
 using GenericNotification.Domain.Entity;
+using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace GenericNotification.Application.Service;
@@ -16,19 +17,21 @@ public class NotificationService : INotificationService
     private readonly IParser parserService;
     private readonly ILogger<NotificationService> logger;
     private readonly IRepository<Notification> repository;
+    private readonly IProducer rabbit;
 
     public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser, 
-        ILogger<NotificationService> log, IRepository<Notification> rep)
+        ILogger<NotificationService> log, IRepository<Notification> rep, IProducer producer)
     {
         localizationMessages = localizer;
         parserService = parser;
         logger = log;
         repository = rep;
+        rabbit = producer;
     }
 
     public async Task SendNotificationAsync(Notification notification)
     {
-        throw new NotImplementedException();
+        await rabbit.Publish(notification.Id.ToString(), "NotificationSend");
     }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)

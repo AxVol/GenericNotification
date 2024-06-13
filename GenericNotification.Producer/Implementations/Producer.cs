@@ -1,4 +1,5 @@
-﻿using GenericNotification.Producer.Interfaces;
+﻿using System.Text;
+using GenericNotification.Producer.Interfaces;
 using RabbitMQ.Client;
 
 namespace GenericNotification.Producer.Implementations;
@@ -16,13 +17,20 @@ public class Producer : IProducer
         model = connectionProvider.GetConnection().CreateModel();
     }
     
-    public void Publish(string message, string routingKey)
+    public async Task Publish(string message, string routingKey)
     {
-        throw new NotImplementedException();
+        await Task.Run(() =>
+        {
+            byte[] body = Encoding.UTF8.GetBytes(message);
+            IBasicProperties properties = model.CreateBasicProperties();
+        
+            model.BasicPublish(exchange, routingKey, properties, body);
+        });
     }
     
     public void Dispose()
     {
-        throw new NotImplementedException();
+        model.Close();
+        GC.SuppressFinalize(this);
     }
 }
