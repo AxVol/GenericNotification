@@ -1,4 +1,6 @@
-﻿using GenericNotification.Application.Interfaces;
+﻿using System.Security.Cryptography;
+using System.Text;
+using GenericNotification.Application.Interfaces;
 using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
 using GenericNotification.DAL.Repository;
@@ -25,7 +27,7 @@ public class MockFactory<T> where T : class
 
     public static IRepository<Notification> GetNotificationRepository()
     {
-        IEnumerable<Notification> repositories = new List<Notification>();
+        IEnumerable<Notification> repositories = GetNotificationList();
         var mock = new Mock<IRepository<Notification>>();
 
         mock.Setup(m => m.Create(It.IsAny<Notification>())).Returns(Task.CompletedTask);
@@ -65,5 +67,28 @@ public class MockFactory<T> where T : class
         mock.Setup(m => m.Publish("message", "routingKey")).Returns(Task.CompletedTask);
 
         return mock.Object;
+    }
+
+    private static IEnumerable<Notification> GetNotificationList()
+    {
+        List<Notification> notifications = new List<Notification>();
+        string uuid = "4dfc6b14-7213-3363-8009-b23c56e3a1b1";
+        Guid guid;
+        bool isGuid = Guid.TryParse(uuid, out guid);
+
+        Notification notification = new Notification()
+        {
+            Id = guid,
+            Title = "test",
+            Body = "test",
+            TimeToSend = DateTime.Now.ToUniversalTime(),
+            IsSend = false,
+            ForUsers = new List<NotificationStatus>(),
+            CreatorName = "test"
+        };
+
+        notifications.Add(notification);
+
+        return notifications;
     }
 }

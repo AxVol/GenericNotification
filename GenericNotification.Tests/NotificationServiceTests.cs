@@ -1,4 +1,5 @@
-﻿using GenericNotification.Application.Interfaces;
+﻿using System.Text;
+using GenericNotification.Application.Interfaces;
 using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
 using GenericNotification.DAL.Repository;
@@ -304,5 +305,34 @@ public class NotificationServiceTests
         // Assert
         Assert.Equal(ResponseStatus.Success, response.Status);
         Assert.Equal(20, response.Value.ForUsers.Count);
+    }
+
+    [Fact]
+    public async void Notification_Get_Test()
+    {
+        // Arrage
+        Guid guid;
+        bool isGuid = Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
+
+        // Act
+        NotificationResponse response = await notificationService.GetNotificationAsync(guid);
+
+        // Assert
+        Assert.Equal(ResponseStatus.Success, response.Status);
+    }
+
+    [Fact]
+    public async void Not_Valid_Notification_Get_Test()
+    {
+        // Arrage
+        Guid guid;
+        bool isGuid = Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
+
+        // Act
+        NotificationResponse response = await notificationService.GetNotificationAsync(guid);
+
+        // Assert
+        Assert.Equal(ResponseStatus.Error, response.Status);
+        Assert.Equal(localizer["NotFoundError"], response.Message);
     }
 }

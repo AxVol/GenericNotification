@@ -34,7 +34,7 @@ public class NotificationService : INotificationService
         NotificationResponse notificationResponse = await Task.Run(() =>
         {
             NotificationResponse notificationResponse = new NotificationResponse();
-            Notification notification = repository.GetAll().First(n => n.Id == id);
+            Notification? notification = repository.GetAll().FirstOrDefault(n => n.Id == id);
 
             if (notification is null)
             {
