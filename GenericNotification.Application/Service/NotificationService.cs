@@ -29,6 +29,30 @@ public class NotificationService : INotificationService
         rabbit = producer;
     }
 
+    public async Task<NotificationResponse> GetNotificationAsync(Guid id)
+    {
+        NotificationResponse notificationResponse = await Task.Run(() =>
+        {
+            NotificationResponse notificationResponse = new NotificationResponse();
+            Notification notification = repository.GetAll().First(n => n.Id == id);
+
+            if (notification is null)
+            {
+                notificationResponse.Status = ResponseStatus.Error;
+                notificationResponse.Message = localizationMessages["NotFoundError"];
+
+                return notificationResponse;
+            }
+
+            notificationResponse.Status = ResponseStatus.Success;
+            notificationResponse.Value = notification;
+            
+            return notificationResponse;
+        });
+
+        return notificationResponse;
+    }
+
     public async Task SendNotificationAsync(Notification notification)
     {
         await rabbit.Publish(notification.Id.ToString(), "NotificationSend");

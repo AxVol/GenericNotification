@@ -78,6 +78,15 @@ namespace GenericNotification.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нотификация не была найдена.
+        /// </summary>
+        internal static string NotFoundError {
+            get {
+                return ResourceManager.GetString("NotFoundError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отсутствует список людей для отправки уведомлений.
         /// </summary>
         internal static string SendersError {

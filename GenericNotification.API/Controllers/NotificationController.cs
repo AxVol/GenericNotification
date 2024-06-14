@@ -2,7 +2,6 @@
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericNotification.Controllers;
@@ -52,5 +51,44 @@ public class NotificationController : ControllerBase
         await notificationService.SendNotificationAsync(notificationResponse.Value);
 
         return new JsonResult(notificationResponse.Status.ToString());
+    }
+
+    /// <remarks>
+    /// Данный эндпоинт принимает id нотификации в виде uuid и возвращает данные о запрошеной нотификации
+    ///
+    ///     GET /Notification
+    ///     {
+    ///         "id": uuid
+    ///     }
+    ///
+    ///      Notification
+    ///     {
+    ///         "id": uuid,
+    ///         "Title": "string", // Название нотификации
+    ///         "Body": "string", // Содержание нотификации
+    ///         "TimeToSend": DateTime, // Время запланированной публикации
+    ///         "IsSend": bool, // Статус нотификации, True - Отправлена полностью. False - Не отправлена
+    ///         "ForUsers" : List
+    ///         {
+    ///              "id": uuid,
+    ///              "Email": "string", // Адрес для отправки нотификации
+    ///              "SendStatus": bool // Статус нотификации для конкретного пользователя
+    ///         }
+    ///         "CreatorName": "string" Создатель нотификации
+    ///     }
+    /// </remarks>
+    /// <response code="200">Данные успешно отправлены</response>
+    /// <response code="400">Для большей инофрмации об ошибке, смотрите описание ошибки в json файле</response>
+    [HttpGet]
+    public async Task<JsonResult> Get(Guid id)
+    {
+        NotificationResponse notification = await notificationService.GetNotificationAsync(id);
+
+        if (notification.Status == ResponseStatus.Error)
+        {
+            return new JsonResult(notification.Message);
+        }
+
+        return new JsonResult(notification);
     }
 }

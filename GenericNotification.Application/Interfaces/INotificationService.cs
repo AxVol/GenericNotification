@@ -8,4 +8,5 @@ public interface INotificationService
 {
     public Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto);
     public Task SendNotificationAsync(Notification notification);
+    public Task<NotificationResponse> GetNotificationAsync(Guid id);
 }

@@ -33,4 +33,7 @@
     <data name="WrongEmailError" xml:space="preserve">
         <value>Не корректная почта автора нотификации</value>
     </data>
+    <data name="NotFoundError" xml:space="preserve">
+        <value>Нотификация не была найдена</value>
+    </data>
 </root>
