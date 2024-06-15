@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GenericNotification.Domain\GenericNotification.Domain.csproj" />
+      <ProjectReference Include="..\GenericNotification.Producer\GenericNotification.Producer.csproj" />
     </ItemGroup>
 
 </Project>

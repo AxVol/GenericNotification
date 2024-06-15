@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using GenericNotification.Application.Interfaces;
+﻿using GenericNotification.Application.Interfaces;
 using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
-using GenericNotification.DAL.Repository;
+using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.Entity;
 using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Localization;
@@ -30,9 +28,9 @@ public class MockFactory<T> where T : class
         IEnumerable<Notification> repositories = GetNotificationList();
         var mock = new Mock<IRepository<Notification>>();
 
-        mock.Setup(m => m.Create(It.IsAny<Notification>())).Returns(Task.CompletedTask);
-        mock.Setup(m => m.Delete(It.IsAny<Notification>())).Returns(Task.CompletedTask);
-        mock.Setup(m => m.Update(It.IsAny<Notification>())).Returns(Task.CompletedTask);
+        mock.Setup(m => m.CreateAsync(It.IsAny<Notification>())).Returns(Task.CompletedTask);
+        mock.Setup(m => m.DeleteAsync(It.IsAny<Notification>())).Returns(Task.CompletedTask);
+        mock.Setup(m => m.UpdateAsync(It.IsAny<Notification>())).Returns(Task.CompletedTask);
         mock.Setup(m => m.GetAll()).Returns(repositories);
 
         return mock.Object;

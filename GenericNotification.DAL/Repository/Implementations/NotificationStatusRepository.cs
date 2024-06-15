@@ -1,8 +1,9 @@
-﻿using GenericNotification.Domain.Entity;
+﻿using GenericNotification.DAL.Repository.Interfaces;
+using GenericNotification.Domain.Entity;
 
-namespace GenericNotification.DAL.Repository;
+namespace GenericNotification.DAL.Repository.Implementations;
 
-public class NotificationStatusRepository : IRepository<NotificationStatus>
+public class NotificationStatusRepository : IDbRepository<NotificationStatus>
 {
     private ApplicationDbContext db;
 
@@ -11,19 +12,19 @@ public class NotificationStatusRepository : IRepository<NotificationStatus>
         db = context;
     }
     
-    public async Task Create(NotificationStatus entity)
+    public async Task CreateAsync(NotificationStatus entity)
     {
         db.NotificationStatus.Add(entity);
         await db.SaveChangesAsync();
     }
 
-    public async Task Update(NotificationStatus entity)
+    public async Task UpdateAsync(NotificationStatus entity)
     {
         db.NotificationStatus.Update(entity);
         await db.SaveChangesAsync();
     }
 
-    public async Task Delete(NotificationStatus entity)
+    public async Task DeleteAsync(NotificationStatus entity)
     {
         db.NotificationStatus.Remove(entity);
         await db.SaveChangesAsync();

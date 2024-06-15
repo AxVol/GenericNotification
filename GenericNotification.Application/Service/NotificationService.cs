@@ -4,9 +4,8 @@ using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
-using GenericNotification.DAL.Repository;
+using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.Entity;
-using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace GenericNotification.Application.Service;
@@ -17,16 +16,14 @@ public class NotificationService : INotificationService
     private readonly IParser parserService;
     private readonly ILogger<NotificationService> logger;
     private readonly IRepository<Notification> repository;
-    private readonly IProducer rabbit;
 
     public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser, 
-        ILogger<NotificationService> log, IRepository<Notification> rep, IProducer producer)
+        ILogger<NotificationService> log, IRepository<Notification> rep)
     {
         localizationMessages = localizer;
         parserService = parser;
         logger = log;
         repository = rep;
-        rabbit = producer;
     }
 
     public async Task<NotificationResponse> GetNotificationAsync(Guid id)
@@ -55,7 +52,8 @@ public class NotificationService : INotificationService
 
     public async Task SendNotificationAsync(Notification notification)
     {
-        await rabbit.Publish<Notification>(notification, "NotificationSend");
+        if (IsToday(notification.TimeToSend))
+            await repository.AddToBrokerAsync(notification, "NotificationSend");
     }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)
@@ -111,7 +109,7 @@ public class NotificationService : INotificationService
         notification.ForUsers = notificationStatus;
         notificationResponse.Value = notification;
 
-        await repository.Create(notification);
+        await repository.CreateAsync(notification);
         
         return notificationResponse;
     }
@@ -170,5 +168,20 @@ public class NotificationService : INotificationService
                 }
             }
         }
+    }
+
+    private bool IsToday(DateTime notificationDate)
+    {
+        DateTime currentDate = DateTime.Now;
+        bool isCurrentDay = currentDate.Day == notificationDate.Day;
+        bool isCurrentMonth = currentDate.Month == notificationDate.Month;
+        bool isCurrentYear = currentDate.Year == notificationDate.Year;
+
+        if (isCurrentDay && isCurrentMonth && isCurrentYear)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

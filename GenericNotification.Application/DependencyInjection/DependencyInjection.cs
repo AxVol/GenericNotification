@@ -10,8 +10,8 @@ public static class DependencyInjection
     {
         serviceCollection.AddScoped<INotificationService, NotificationService>();
         serviceCollection.AddScoped<IParser, Parser>();
-        
-        
+        serviceCollection.AddHostedService<UpdateNotificationListHostedService>();
+
         return serviceCollection;
     }
 }

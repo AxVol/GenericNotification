@@ -1,8 +1,7 @@
-﻿using System.Text;
-using GenericNotification.Application.Interfaces;
+﻿using GenericNotification.Application.Interfaces;
 using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
-using GenericNotification.DAL.Repository;
+using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Entity;
 using GenericNotification.Domain.Enum;
@@ -29,7 +28,7 @@ public class NotificationServiceTests
         localizer = Mock.MockFactory<NotificationService>.GetLocalaizer();
         IProducer rabbit = Mock.MockFactory<NotificationService>.GetRabbitMq();
 
-        notificationService = new NotificationService(localizer, parser, logger, repository, rabbit);
+        notificationService = new NotificationService(localizer, parser, logger, repository);
     }
 
     [Fact]
