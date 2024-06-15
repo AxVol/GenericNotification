@@ -55,7 +55,7 @@ public class NotificationService : INotificationService
 
     public async Task SendNotificationAsync(Notification notification)
     {
-        await rabbit.Publish(notification.Id.ToString(), "NotificationSend");
+        await rabbit.Publish<Notification>(notification, "NotificationSend");
     }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)

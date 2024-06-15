@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json;
 using GenericNotification.Producer.Interfaces;
 using RabbitMQ.Client;
 
@@ -17,11 +18,12 @@ public class Producer : IProducer
         model = connectionProvider.GetConnection().CreateModel();
     }
     
-    public async Task Publish(string message, string routingKey)
+    public async Task Publish<T>(T obj, string routingKey)
     {
         await Task.Run(() =>
         {
-            byte[] body = Encoding.UTF8.GetBytes(message);
+            string json = JsonSerializer.Serialize(obj);
+            byte[] body = Encoding.UTF8.GetBytes(json);
             IBasicProperties properties = model.CreateBasicProperties();
         
             model.BasicPublish(exchange, routingKey, properties, body);

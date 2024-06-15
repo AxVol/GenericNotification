@@ -11,6 +11,7 @@ public static class DependencyInjection
         serviceCollection.AddScoped<INotificationService, NotificationService>();
         serviceCollection.AddScoped<IParser, Parser>();
         
+        
         return serviceCollection;
     }
 }
