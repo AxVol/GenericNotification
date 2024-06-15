@@ -1,32 +1,54 @@
-﻿using GenericNotification.Application.Interfaces;
+﻿using GenericNotification.DAL.Repository.Interfaces;
+using GenericNotification.Domain.Entity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace GenericNotification.Application.Service;
 
+/// <summary>
+/// Бэкграунд сервис отвечающий за то, чтобы каждый день в 12 часов он проверял базу данных на ранее созданые нотификации
+/// и отправлял их в сервис по отправке, при условии если есть нотификации которые надо отправить в течении текущего дня
+/// </summary>
 public class UpdateNotificationListHostedService : BackgroundService
 {
     private readonly ILogger<UpdateNotificationListHostedService> logger;
-    private readonly INotificationService notificationService;
-    private Timer? timer = null;
-    private readonly int refreshInterval = 5; // время в минутах
+    private readonly IRepository<Notification> repository;
 
     public UpdateNotificationListHostedService(ILogger<UpdateNotificationListHostedService> log,
-        INotificationService service)
+        IRepository<Notification> rep)
     {
         logger = log;
-        notificationService = service;
+        repository = rep;
     }
     
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(refreshInterval));
-        
-        return Task.CompletedTask;
+        do
+        {
+            TimeSpan waitTime = new TimeSpan(23, 59, 59) - DateTime.UtcNow.TimeOfDay;
+
+            logger.LogInformation($"До следующего запуска осталось - {waitTime.ToString()}");
+            await Task.Delay(waitTime, stoppingToken);
+            
+            await DoWork(null);
+        } while (!stoppingToken.IsCancellationRequested);
     }
 
-    private void DoWork(object? state)
+    private Task DoWork(object? state)
     {
+        int counter = 0;
+        DateTime today = DateTime.UtcNow;
+        IEnumerable<Notification> notifications = repository.GetAll().Where(n => n.TimeToSend.Year == today.Year
+        && n.TimeToSend.Month == today.Month && n.TimeToSend.Day == today.Day);
+
+        foreach (Notification notification in notifications)
+        {
+            counter++;
+            repository.AddToBrokerAsync(notification, "NotificationSend");
+        }
+
+        logger.LogInformation($"В очередь было загружено - {counter} нотификаций");
         
+        return Task.CompletedTask;
     }
 }

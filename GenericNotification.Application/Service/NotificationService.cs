@@ -172,7 +172,7 @@ public class NotificationService : INotificationService
 
     private bool IsToday(DateTime notificationDate)
     {
-        DateTime currentDate = DateTime.Now;
+        DateTime currentDate = DateTime.UtcNow;
         bool isCurrentDay = currentDate.Day == notificationDate.Day;
         bool isCurrentMonth = currentDate.Month == notificationDate.Month;
         bool isCurrentYear = currentDate.Year == notificationDate.Year;
