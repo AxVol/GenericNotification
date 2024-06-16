@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen(opt =>
 });
 
 builder.Services.AddDataAccessLayer(builder.Configuration);
-builder.Services.AddRabbitMq(builder.Configuration);
+builder.Services.AddBrokerProducer(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddLocalization(opt => opt.ResourcesPath = "../Core/Resources");
 

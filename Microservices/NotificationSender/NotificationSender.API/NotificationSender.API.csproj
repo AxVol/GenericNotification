@@ -11,6 +11,10 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
@@ -21,7 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\" />
+      <ProjectReference Include="..\NotificationSender.Application\NotificationSender.Application.csproj" />
+      <ProjectReference Include="..\NotificationSender.Concumer\NotificationSender.Concumer.csproj" />
+      <ProjectReference Include="..\NotificationSender.DAL\NotificationSender.DAL.csproj" />
     </ItemGroup>
 
 </Project>

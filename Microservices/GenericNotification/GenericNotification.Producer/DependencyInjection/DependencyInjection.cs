@@ -7,7 +7,7 @@ namespace GenericNotification.Producer.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddRabbitMq(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddBrokerProducer(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("RabbitMQ");
 
