@@ -1,5 +1,6 @@
 ﻿using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.Entity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -15,10 +16,10 @@ public class UpdateNotificationListHostedService : BackgroundService
     private readonly IRepository<Notification> repository;
 
     public UpdateNotificationListHostedService(ILogger<UpdateNotificationListHostedService> log,
-        IRepository<Notification> rep)
+        IServiceScopeFactory factory)
     {
         logger = log;
-        repository = rep;
+        repository = factory.CreateScope().ServiceProvider.GetRequiredService<IRepository<Notification>>();
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
