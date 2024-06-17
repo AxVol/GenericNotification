@@ -10,10 +10,11 @@ public static class DependencyInjection
     public static IServiceCollection AddBrokerProducer(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("RabbitMQ");
+        string exchange = configuration["Exchange"];
 
         serviceCollection.AddSingleton<IConnectionProvider>(new ConnectionProvider(connectionString));
         serviceCollection.AddScoped<IProducer>(p => new Implementations.Producer(p.GetService<IConnectionProvider>(),
-            "NotificationExchange"));
+            exchange));
         
         return serviceCollection;
     }

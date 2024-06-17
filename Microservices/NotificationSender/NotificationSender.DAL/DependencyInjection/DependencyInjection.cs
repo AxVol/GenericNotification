@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NotificationSender.DAL.Repository.Interfaces;
 
 namespace NotificationSender.DAL.DependencyInjection;
 

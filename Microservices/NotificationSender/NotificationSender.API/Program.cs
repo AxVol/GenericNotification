@@ -1,6 +1,6 @@
 using System.Reflection;
 using NotificationSender.Application.DependencyInjection;
-using NotificationSender.Concumer.DependencyInjection;
+using NotificationSender.Consumer.DependencyInjection;
 using NotificationSender.DAL.DependencyInjection;
 using Serilog;
 
@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen(opt =>
 });
 
 builder.Services.AddDataAccessLevel();
-builder.Services.AddBrokerConsumer();
+builder.Services.AddBrokerConsumer(builder.Configuration);
 builder.Services.AddServices();
 
 Log.Logger = new LoggerConfiguration()

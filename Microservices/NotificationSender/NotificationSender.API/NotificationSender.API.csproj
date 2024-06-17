@@ -7,6 +7,7 @@
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>NotificationSender</RootNamespace>
+        <UserSecretsId>fcdba1da-9705-4fea-b543-6ed2a7e234f7</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,7 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NotificationSender.Application\NotificationSender.Application.csproj" />
-      <ProjectReference Include="..\NotificationSender.Concumer\NotificationSender.Concumer.csproj" />
+      <ProjectReference Include="..\NotificationSender.Consumer\NotificationSender.Consumer.csproj" />
       <ProjectReference Include="..\NotificationSender.DAL\NotificationSender.DAL.csproj" />
     </ItemGroup>
 

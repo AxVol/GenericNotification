@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.DAL", "NotificationSender.DAL\NotificationSender.DAL.csproj", "{F934A247-7ABD-48AE-8E3C-576C7A06EDD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Concumer", "NotificationSender.Concumer\NotificationSender.Concumer.csproj", "{D7979475-611F-4C5D-BBB3-90B3D1BD1B87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Consumer", "NotificationSender.Consumer\NotificationSender.Consumer.csproj", "{D7979475-611F-4C5D-BBB3-90B3D1BD1B87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
