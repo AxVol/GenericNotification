@@ -14,9 +14,10 @@ builder.Services.AddSwaggerGen(opt =>
         $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
 
-builder.Services.AddDataAccessLevel();
+builder.Services.AddDataAccessLevel(builder.Configuration);
 builder.Services.AddBrokerConsumer(builder.Configuration);
 builder.Services.AddServices();
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "../Core/Resources");
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()

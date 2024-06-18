@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenericNotification.Application.Resources {
+namespace NotificationSender.Domain.Resources {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace GenericNotification.Application.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GenericNotification.Application.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NotificationSender.Domain.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,56 +60,11 @@ namespace GenericNotification.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не верный формат файла, убедитесь что он соответствует .csv или .xls.
-        /// </summary>
-        internal static string FileFormatError {
-            get {
-                return ResourceManager.GetString("FileFormatError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Некорректное содержание файла.
-        /// </summary>
-        internal static string FileParseError {
-            get {
-                return ResourceManager.GetString("FileParseError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Нотификация не была найдена.
         /// </summary>
-        internal static string NotFoundError {
+        internal static string NotFound {
             get {
-                return ResourceManager.GetString("NotFoundError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Отсутствует список людей для отправки уведомлений.
-        /// </summary>
-        internal static string SendersError {
-            get {
-                return ResourceManager.GetString("SendersError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Указана неверная дата.
-        /// </summary>
-        internal static string WrongDateError {
-            get {
-                return ResourceManager.GetString("WrongDateError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Не корректная почта автора нотификации.
-        /// </summary>
-        internal static string WrongEmailError {
-            get {
-                return ResourceManager.GetString("WrongEmailError", resourceCulture);
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
     }

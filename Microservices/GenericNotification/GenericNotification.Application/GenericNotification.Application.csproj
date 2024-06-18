@@ -15,21 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\ErrorMessages.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\ErrorMessages.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>ErrorMessages.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\GenericNotification.DAL\GenericNotification.DAL.csproj" />
       <ProjectReference Include="..\GenericNotification.Domain\GenericNotification.Domain.csproj" />
       <ProjectReference Include="..\GenericNotification.Producer\GenericNotification.Producer.csproj" />
