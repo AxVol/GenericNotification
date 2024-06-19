@@ -21,4 +21,7 @@
     <data name="NotFound" xml:space="preserve">
         <value>Нотификация не была найдена</value>
     </data>
+    <data name="NotificationQueueError" xml:space="preserve">
+        <value>Из очереди пришла не корректная нотификация</value>
+    </data>
 </root>

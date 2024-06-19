@@ -22,7 +22,7 @@ public class Consumer : IConsumer
         model.QueueBind(queue, exchange, routingKey);
     }
 
-    public void SubscribeAsync(Func<string, IDictionary<string, object>, Task<bool>> callback)
+    public void SubscribeAsync(Func<string, Task<bool>> callback)
     {
         AsyncEventingBasicConsumer consumer = new AsyncEventingBasicConsumer(model);
 
@@ -30,7 +30,7 @@ public class Consumer : IConsumer
         {
             byte[] body = e.Body.ToArray();
             string message = Encoding.UTF8.GetString(body);
-            bool success = await callback.Invoke(message, e.BasicProperties.Headers);
+            bool success = await callback.Invoke(message);
 
             if (success)
             {

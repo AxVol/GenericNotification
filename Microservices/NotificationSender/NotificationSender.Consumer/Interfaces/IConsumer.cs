@@ -2,5 +2,5 @@
 
 public interface IConsumer : IDisposable
 {
-    public void SubscribeAsync(Func<string, IDictionary<string, object>, Task<bool>> callback);
+    public void SubscribeAsync(Func<string, Task<bool>> callback);
 }

@@ -1,4 +1,4 @@
-﻿using NotificationSender.Domain.Dto;
+﻿using NotificationSender.Domain.Emun;
 using NotificationSender.Domain.Interfaces;
 
 namespace NotificationSender.Domain.Entity;
@@ -12,4 +12,14 @@ public class Notification : IEntityId<Guid>
     public bool IsSend { get; set; }
     public List<NotificationStatus> ForUsers { get; set; }
     public string CreatorName { get; set; }
+    public int CountNotifications { get; private set; } = -1;
+    public NotificationState NotificationState { get; set; }
+    
+    public void SetNotificaitonCount(int count)
+    {
+        if (CountNotifications != -1)
+            return;
+
+        CountNotifications = count;
+    }
 }

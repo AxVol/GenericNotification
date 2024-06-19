@@ -67,5 +67,14 @@ namespace NotificationSender.Domain.Resources {
                 return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Из очереди пришла не корректная нотификация.
+        /// </summary>
+        internal static string NotificationQueueError {
+            get {
+                return ResourceManager.GetString("NotificationQueueError", resourceCulture);
+            }
+        }
     }
 }
