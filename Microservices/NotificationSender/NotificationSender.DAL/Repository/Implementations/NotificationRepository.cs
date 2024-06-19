@@ -12,7 +12,7 @@ public class NotificationRepository : IRepository<Notification>
     private readonly IDistributedCache redis;
     private readonly IStringLocalizer<Resources> localizationMessages;
 
-    public NotificationRepository(IDistributedCache cache, IStringLocalizer localization)
+    public NotificationRepository(IDistributedCache cache, IStringLocalizer<Resources> localization)
     {
         redis = cache;
         localizationMessages = localization;
@@ -82,7 +82,7 @@ public class NotificationRepository : IRepository<Notification>
         }
     }
 
-    public Task DeleteAsync(Notification entity)
+    public async Task DeleteAsync(Notification entity)
     {
         Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
         string id = entity.Id.ToString();

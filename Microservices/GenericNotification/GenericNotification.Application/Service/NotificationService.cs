@@ -2,6 +2,7 @@
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
+using GenericNotification.Domain.Resources;
 using Microsoft.Extensions.Localization;
 using System.ComponentModel.DataAnnotations;
 using GenericNotification.DAL.Repository.Interfaces;
@@ -12,12 +13,12 @@ namespace GenericNotification.Application.Service;
 
 public class NotificationService : INotificationService
 {
-    private readonly IStringLocalizer<Resources.Resources> localizationMessages;
+    private readonly IStringLocalizer<Resources> localizationMessages;
     private readonly IParser parserService;
     private readonly ILogger<NotificationService> logger;
     private readonly IRepository<Notification> repository;
 
-    public NotificationService(IStringLocalizer<Resources.Resources> localizer, IParser parser, 
+    public NotificationService(IStringLocalizer<Resources> localizer, IParser parser, 
         ILogger<NotificationService> log, IRepository<Notification> rep)
     {
         localizationMessages = localizer;

@@ -1,8 +1,8 @@
 ﻿using GenericNotification.Application.Interfaces;
-using GenericNotification.Application.Resources;
 using GenericNotification.Application.Service;
 using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.Entity;
+using GenericNotification.Domain.Resources;
 using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;

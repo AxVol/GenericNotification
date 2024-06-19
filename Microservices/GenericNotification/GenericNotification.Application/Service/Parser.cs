@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using GenericNotification.Application.Interfaces;
 using GenericNotification.Domain.Entity;
+using GenericNotification.Domain.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using OfficeOpenXml;
@@ -9,7 +10,7 @@ namespace GenericNotification.Application.Service;
 
 public class Parser : IParser
 {
-    private readonly IStringLocalizer<Resources.Resources> localizer;
+    private readonly IStringLocalizer<Resources> localizer;
     public Dictionary<string, string> FileExtensions
     {
         get => new Dictionary<string, string>()
@@ -21,7 +22,7 @@ public class Parser : IParser
         };
     }
 
-    public Parser(IStringLocalizer<Resources.Resources> stringLocalizer)
+    public Parser(IStringLocalizer<Resources> stringLocalizer)
     {
         localizer = stringLocalizer;
     }

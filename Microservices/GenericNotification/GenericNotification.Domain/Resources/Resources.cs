@@ -1,4 +1,4 @@
-﻿namespace GenericNotification.Application.Resources;
+﻿namespace GenericNotification.Domain.Resources;
 
 public class Resources
 {
