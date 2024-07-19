@@ -171,6 +171,25 @@ public class NotificationService : INotificationService
         }
     }
 
+    public async Task<NotificationResponse> DeleteNotificationAsync(Guid id)
+    {
+        NotificationResponse notificationResponse = new NotificationResponse();
+        Notification? notification = repository.GetAll().FirstOrDefault(n => n.Id == id);
+
+        if (notification is null)
+        {
+            notificationResponse.Status = ResponseStatus.Error;
+            notificationResponse.Message = localizationMessages["NotFoundError"];
+
+            return notificationResponse;
+        }
+
+        notificationResponse.Status = ResponseStatus.Success;
+        notificationResponse.Value = notification;
+            
+        return notificationResponse;
+    }
+
     private bool IsToday(DateTime notificationDate)
     {
         DateTime currentDate = DateTime.UtcNow;

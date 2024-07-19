@@ -73,8 +73,11 @@ public class NotificationRepository : IRepository<Notification>
         
         if (notifications.ContainsKey(id))
         {
-            notifications.Remove(id);
-            notifications.Add(entity.Id.ToString(), entity);
+            notifications[id] = entity;
+            string notificationsDict = JsonSerializer.Serialize(notifications);
+
+            await redis.RemoveAsync(notificationDate);
+            await redis.SetStringAsync(notificationDate, notificationsDict);
         }
         else
         {
@@ -97,6 +100,14 @@ public class NotificationRepository : IRepository<Notification>
         if (notifications.ContainsKey(id))
         {
             notifications.Remove(id);
+
+            await redis.RemoveAsync(notificationDate);
+            
+            if (notifications.Count != 0)
+            {
+                string notificationsDict = JsonSerializer.Serialize(notifications);
+                await redis.SetStringAsync(notificationDate, notificationsDict);
+            }
         }
         else
         {

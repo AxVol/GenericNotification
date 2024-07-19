@@ -2,6 +2,7 @@
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericNotification.Controllers;
@@ -91,5 +92,28 @@ public class NotificationController : ControllerBase
         }
 
         return new JsonResult(notification);
+    }
+
+    /// <remarks>
+    /// Данный эндпоинт принимает нотификацию для её удаления из базы данных
+    ///
+    ///     DELETE /Notification
+    ///     {
+    ///         "id": uuid
+    ///     }
+    /// </remarks>
+    /// <response code="200">Данные успешно удалены</response>
+    /// <response code="400">Для большей инофрмации об ошибке, смотрите описание ошибки в json файле</response>
+    [HttpDelete]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        NotificationResponse notification = await notificationService.DeleteNotificationAsync(id);
+
+        if (notification.Status == ResponseStatus.Error)
+        {
+            return new JsonResult(notification.Message);
+        }
+
+        return Ok();
     }
 }
