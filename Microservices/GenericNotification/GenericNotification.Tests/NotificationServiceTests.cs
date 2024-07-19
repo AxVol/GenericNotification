@@ -334,4 +334,33 @@ public class NotificationServiceTests
         Assert.Equal(ResponseStatus.Error, response.Status);
         Assert.Equal(localizer["NotFoundError"], response.Message);
     }
+
+    [Fact]
+    public async void Delete_Exist_Notification_Test()
+    {
+        // Arrage
+        Guid guid;
+        bool isGuid = Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
+
+        // Act
+        NotificationResponse response = await notificationService.DeleteNotificationAsync(guid);
+
+        // Assert
+        Assert.Equal(ResponseStatus.Success, response.Status);
+    }
+
+    [Fact]
+    public async void Delete_Not_Exist_Notification_Test()
+    {
+        // Arrage
+        Guid guid;
+        bool isGuid = Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
+
+        // Act
+        NotificationResponse response = await notificationService.DeleteNotificationAsync(guid);
+
+        // Assert
+        Assert.Equal(ResponseStatus.Error, response.Status);
+        Assert.Equal(localizer["NotFoundError"], response.Message);
+    }
 }

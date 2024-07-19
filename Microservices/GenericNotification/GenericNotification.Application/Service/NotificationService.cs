@@ -186,6 +186,8 @@ public class NotificationService : INotificationService
 
         notificationResponse.Status = ResponseStatus.Success;
         notificationResponse.Value = notification;
+
+        await repository.DeleteAsync(notification);
             
         return notificationResponse;
     }
