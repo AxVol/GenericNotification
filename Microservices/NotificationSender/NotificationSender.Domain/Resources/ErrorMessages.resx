@@ -24,4 +24,7 @@
     <data name="NotificationQueueError" xml:space="preserve">
         <value>Из очереди пришла не корректная нотификация</value>
     </data>
+    <data name="AddToRedisError" xml:space="preserve">
+        <value>Ошибка при добовлении в редис</value>
+    </data>
 </root>

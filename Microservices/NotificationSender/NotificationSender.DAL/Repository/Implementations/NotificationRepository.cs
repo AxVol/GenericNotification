@@ -33,7 +33,7 @@ public class NotificationRepository : IRepository<Notification>
         await redis.SetStringAsync(notificationDate, notificationsDict);
     }
 
-    public async Task<Notification?> GetAsync(Notification entity)
+    public async Task<Notification> GetAsync(Notification entity)
     {
         Notification notification = new Notification();
         Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
@@ -42,7 +42,7 @@ public class NotificationRepository : IRepository<Notification>
         string? notificationsJson = await redis.GetStringAsync(notificationDate);
 
         if (notificationsJson is null)
-            return null;
+            throw new InvalidDataException(localizationMessages["NotFound"]);
         
         notifications = JsonSerializer.Deserialize<Dictionary<string, Notification>>(notificationsJson);
 
@@ -54,7 +54,7 @@ public class NotificationRepository : IRepository<Notification>
         }
         else
         {
-            return null;
+            throw new InvalidDataException(localizationMessages["NotFound"]);
         }
         
     }

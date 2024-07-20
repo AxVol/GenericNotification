@@ -41,7 +41,15 @@ public class ConsumerService : IConsumerService
         notification.SetNotificaitonCount(notification.ForUsers.Count);
         notification.NotificationState = NotificationState.NotStarted;
         logger.LogInformation($"Notification Added, uuid - {notification.Id}");
-        await repository.AddAsync(notification);
+
+        try
+        {
+            await repository.AddAsync(notification);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError($"{localizer["AddToRedisError"]}\n Error - {ex.Message} ");
+        }
 
         return true;
     }

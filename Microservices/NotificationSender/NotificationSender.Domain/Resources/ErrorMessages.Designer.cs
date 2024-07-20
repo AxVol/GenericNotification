@@ -60,6 +60,15 @@ namespace NotificationSender.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ошибка при добовлении в редис.
+        /// </summary>
+        internal static string AddToRedisError {
+            get {
+                return ResourceManager.GetString("AddToRedisError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Нотификация не была найдена.
         /// </summary>
         internal static string NotFound {
