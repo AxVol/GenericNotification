@@ -9,10 +9,10 @@ namespace NotificationSender.Tests.Mock;
 
 public static class MockFactory<T> where T : class
 {
-    public static IRepository<Notification> GetNotificationRepository()
+    public static INotificationRepository GetNotificationRepository()
     {
         Notification notification = GetNotification();
-        var mock = new Mock<IRepository<Notification>>();
+        var mock = new Mock<INotificationRepository>();
 
         mock.Setup(m => m.AddAsync(It.IsAny<Notification>())).Returns(Task.CompletedTask);
         mock.Setup(m => m.DeleteAsync(It.IsAny<Notification>())).Returns(Task.CompletedTask);

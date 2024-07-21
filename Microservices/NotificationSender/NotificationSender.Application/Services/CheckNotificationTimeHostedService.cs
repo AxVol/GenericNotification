@@ -38,6 +38,5 @@ public class CheckNotificationTimeHostedService : BackgroundService
         
         DateTime dateTime = DateTime.UtcNow;
         Dictionary<string, Notification> notifications = await repository.GetAllByDate(dateTime);
-        
     }
 }

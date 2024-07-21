@@ -4,7 +4,6 @@ using NotificationSender.Application.Services;
 using NotificationSender.DAL.Repository.Interfaces;
 using NotificationSender.Domain.Dto;
 using NotificationSender.Domain.Emun;
-using NotificationSender.Domain.Entity;
 using NotificationSender.Domain.Response;
 using Xunit;
 
@@ -16,7 +15,7 @@ public class NotificationServiceTests
 
     public NotificationServiceTests()
     {
-        IRepository<Notification> repository = Mock.MockFactory<NotificationService>.GetNotificationRepository();
+        INotificationRepository repository = Mock.MockFactory<NotificationService>.GetNotificationRepository();
         ILogger<NotificationService> logger = Mock.MockFactory<NotificationService>.GetLogger();
         notificationService = new NotificationService(repository, logger);
     }
