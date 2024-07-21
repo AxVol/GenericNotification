@@ -7,7 +7,7 @@ using NotificationSender.Domain.Resources;
 
 namespace NotificationSender.DAL.Repository.Implementations;
 
-public class NotificationRepository : IRepository<Notification>
+public class NotificationRepository : INotificationRepository
 {
     private readonly IDistributedCache redis;
     private readonly IStringLocalizer<Resources> localizationMessages;
@@ -17,38 +17,40 @@ public class NotificationRepository : IRepository<Notification>
         redis = cache;
         localizationMessages = localization;
     }
-    
-    public async Task AddAsync(Notification entity)
+
+    public async Task<Dictionary<string, Notification>> GetAllByDate(DateTime dateTime)
     {
         Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
-        string notificationDate = entity.TimeToSend.ToString();
+        string notificationDate = dateTime.ToString();
         string? notificationsJson = await redis.GetStringAsync(notificationDate);
 
         if (notificationsJson is not null)
             notifications = JsonSerializer.Deserialize<Dictionary<string, Notification>>(notificationsJson);
 
+        return notifications;
+    }
+    
+    public async Task AddAsync(Notification entity)
+    {
+        Dictionary<string, Notification> notifications = await GetAllByDate(entity.TimeToSend);
         notifications.Add(entity.Id.ToString(), entity);
         
         string notificationsDict = JsonSerializer.Serialize(notifications);
-        await redis.SetStringAsync(notificationDate, notificationsDict);
+        await redis.SetStringAsync(entity.TimeToSend.ToString(), notificationsDict);
     }
 
     public async Task<Notification> GetAsync(Notification entity)
     {
         Notification notification = new Notification();
-        Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
+        Dictionary<string, Notification> notifications = await GetAllByDate(entity.TimeToSend);
         string id = entity.Id.ToString();
-        string notificationDate = entity.TimeToSend.ToString();
-        string? notificationsJson = await redis.GetStringAsync(notificationDate);
 
-        if (notificationsJson is null)
+        if (notifications.Count == 0)
             throw new InvalidDataException(localizationMessages["NotFound"]);
-        
-        notifications = JsonSerializer.Deserialize<Dictionary<string, Notification>>(notificationsJson);
 
         if (notifications.ContainsKey(id))
         {
-            notification = notifications[entity.Id.ToString()];
+            notification = notifications[id];
 
             return notification;
         }
@@ -61,23 +63,20 @@ public class NotificationRepository : IRepository<Notification>
 
     public async Task UpdateAsync(Notification entity)
     {
-        Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
+        Dictionary<string, Notification> notifications = await GetAllByDate(entity.TimeToSend);
         string id = entity.Id.ToString();
-        string notificationDate = entity.TimeToSend.ToString();
-        string? notificationsJson = await redis.GetStringAsync(notificationDate);
-
-        if (notificationsJson is null)
+        string date = entity.TimeToSend.ToString();
+        
+        if (notifications.Count == 0)
             throw new InvalidDataException(localizationMessages["NotFound"]);
-        
-        notifications = JsonSerializer.Deserialize<Dictionary<string, Notification>>(notificationsJson);
-        
+
         if (notifications.ContainsKey(id))
         {
             notifications[id] = entity;
             string notificationsDict = JsonSerializer.Serialize(notifications);
 
-            await redis.RemoveAsync(notificationDate);
-            await redis.SetStringAsync(notificationDate, notificationsDict);
+            await redis.RemoveAsync(date);
+            await redis.SetStringAsync(date, notificationsDict);
         }
         else
         {
@@ -87,26 +86,23 @@ public class NotificationRepository : IRepository<Notification>
 
     public async Task DeleteAsync(Notification entity)
     {
-        Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
+        Dictionary<string, Notification> notifications = await GetAllByDate(entity.TimeToSend);
         string id = entity.Id.ToString();
-        string notificationDate = entity.TimeToSend.ToString();
-        string? notificationsJson = await redis.GetStringAsync(notificationDate);
-
-        if (notificationsJson is null)
+        string date = entity.TimeToSend.ToString();
+        
+        if (notifications.Count == 0)
             throw new InvalidDataException(localizationMessages["NotFound"]);
-        
-        notifications = JsonSerializer.Deserialize<Dictionary<string, Notification>>(notificationsJson);
-        
+
         if (notifications.ContainsKey(id))
         {
             notifications.Remove(id);
 
-            await redis.RemoveAsync(notificationDate);
+            await redis.RemoveAsync(date);
             
             if (notifications.Count != 0)
             {
                 string notificationsDict = JsonSerializer.Serialize(notifications);
-                await redis.SetStringAsync(notificationDate, notificationsDict);
+                await redis.SetStringAsync(date, notificationsDict);
             }
         }
         else

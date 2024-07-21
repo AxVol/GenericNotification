@@ -19,7 +19,7 @@ public static class DependencyInjection
             opt.Configuration = redisConf;
             opt.InstanceName = instance;
         });
-        serviceCollection.AddScoped<IRepository<Notification>, NotificationRepository>();
+        serviceCollection.AddScoped<INotificationRepository, NotificationRepository>();
 
         return serviceCollection;
     }

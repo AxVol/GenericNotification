@@ -13,11 +13,11 @@ namespace NotificationSender.Application.Services;
 public class ConsumerService : IConsumerService
 {
     private readonly IConsumer rabbit;
-    private readonly IRepository<Notification> repository;
+    private readonly INotificationRepository repository;
     private readonly ILogger<ConsumerService> logger;
     private readonly IStringLocalizer<Resources> localizer;
 
-    public ConsumerService(IRepository<Notification> repo, IConsumer consumer, ILogger<ConsumerService> log,
+    public ConsumerService(INotificationRepository repo, IConsumer consumer, ILogger<ConsumerService> log,
         IStringLocalizer<Resources> local)
     {
         rabbit = consumer;

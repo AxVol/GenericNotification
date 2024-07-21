@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         serviceCollection.AddSingleton<IConsumerService, ConsumerService>();
         serviceCollection.AddTransient<INotificationService, NotificationService>();
+        serviceCollection.AddHostedService<CheckNotificationTimeHostedService>();
 
         return serviceCollection;
     }

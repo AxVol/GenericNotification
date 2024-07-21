@@ -11,10 +11,10 @@ namespace NotificationSender.Application.Services;
 
 public class NotificationService : INotificationService
 {
-    private readonly IRepository<Notification> repository;
+    private readonly INotificationRepository repository;
     private readonly ILogger<NotificationService> logger;
 
-    public NotificationService(IRepository<Notification> rep, ILogger<NotificationService> log)
+    public NotificationService(INotificationRepository rep, ILogger<NotificationService> log)
     {
         repository = rep;
         logger = log;
