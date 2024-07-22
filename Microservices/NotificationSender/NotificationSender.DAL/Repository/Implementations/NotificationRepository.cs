@@ -18,6 +18,11 @@ public class NotificationRepository : INotificationRepository
         localizationMessages = localization;
     }
 
+    public async Task DeleteByDate(DateTime dateTime)
+    {
+        await redis.RemoveAsync(dateTime.ToString());
+    }
+
     public async Task<Dictionary<string, Notification>> GetAllByDate(DateTime dateTime)
     {
         Dictionary<string, Notification> notifications = new Dictionary<string, Notification>();
