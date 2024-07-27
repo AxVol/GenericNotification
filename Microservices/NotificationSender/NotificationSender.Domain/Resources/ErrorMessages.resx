@@ -27,4 +27,7 @@
     <data name="AddToRedisError" xml:space="preserve">
         <value>Ошибка при добовлении в редис</value>
     </data>
+    <data name="ErrorSendMessage" xml:space="preserve">
+        <value>Ошибка отправки сообщения</value>
+    </data>
 </root>

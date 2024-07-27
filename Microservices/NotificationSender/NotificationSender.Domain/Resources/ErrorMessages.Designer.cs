@@ -69,6 +69,15 @@ namespace NotificationSender.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ошибка отправки сообщения.
+        /// </summary>
+        internal static string ErrorSendMessage {
+            get {
+                return ResourceManager.GetString("ErrorSendMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Нотификация не была найдена.
         /// </summary>
         internal static string NotFound {
