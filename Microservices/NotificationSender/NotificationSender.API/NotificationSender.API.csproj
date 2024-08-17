@@ -8,6 +8,8 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>NotificationSender</RootNamespace>
         <UserSecretsId>fcdba1da-9705-4fea-b543-6ed2a7e234f7</UserSecretsId>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <DocumentationFile>bin\Debug\NotificationSender.API.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

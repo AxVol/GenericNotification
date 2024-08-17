@@ -2,7 +2,6 @@
 using GenericNotification.Domain.DTO;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericNotification.Controllers;

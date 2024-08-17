@@ -6,17 +6,17 @@ using NotificationSender.Domain.Response;
 
 namespace NotificationSender.Controllers;
 
-[Route("api/SendNotification")]
+[Route("api/Notification")]
 [ApiController]
-public class NotificationSenderController : ControllerBase
+public class NotificationController
 {
     private readonly INotificationService notificationService;
     
-    public NotificationSenderController(INotificationService service)
+    public NotificationController(INotificationService service)
     {
         notificationService = service;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetNotificationState(NotificationDto notification)
     {
@@ -24,22 +24,9 @@ public class NotificationSenderController : ControllerBase
 
         if (notificationState.Status == ResponseStatus.Success)
         {
-           return new JsonResult(notificationState.Value);    
+            return new JsonResult(notificationState.Value);
         }
 
         return new JsonResult(notificationState.Message);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetProcessedUsers(NotificationDto notification)
-    {
-        UsersProcessedResponse notificationResponse = await notificationService.GetProcessedUsersAsync(notification);
-
-        if (notificationResponse.Status == ResponseStatus.Success)
-        {
-            return new JsonResult(notificationResponse.Value.ToString());
-        }
-
-        return new JsonResult(notificationResponse.Message);
     }
 }
