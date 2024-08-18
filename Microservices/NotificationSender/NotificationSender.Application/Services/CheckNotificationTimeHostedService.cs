@@ -38,8 +38,17 @@ public class CheckNotificationTimeHostedService : BackgroundService
     private async Task DoWork(object? state)
     {
         logger.LogInformation("Start checking notification");
-        
-        DateTime dateTime = DateTime.UtcNow;
+
+        // Приводиться время к общему виду которое хранит redis отбросив секунды
+        int seconds = 0;
+        DateTime dateTime = new DateTime(
+            DateTime.UtcNow.Year,
+            DateTime.UtcNow.Month,
+            DateTime.UtcNow.Day,
+            DateTime.UtcNow.Hour,
+            DateTime.UtcNow.Minute,
+            seconds
+        );
         Dictionary<string, Notification> notifications = await repository.GetAllByDate(dateTime);
         await repository.DeleteByDate(dateTime);
 

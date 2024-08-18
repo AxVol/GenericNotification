@@ -38,7 +38,6 @@ public class NotificationSenderService : INotificationSenderService
     
     public async Task SendNotificationAsync(Notification notification)
     {
-        logger.LogInformation($"Start sending notification {notification.Id}");
         notification.NotificationState = NotificationState.InProgress;
 
         using (SmtpClient client = new SmtpClient())
