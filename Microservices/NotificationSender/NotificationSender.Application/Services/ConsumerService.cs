@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using NotificationSender.Application.Interfaces;
@@ -10,7 +11,7 @@ using NotificationSender.Domain.Resources;
 
 namespace NotificationSender.Application.Services;
 
-public class ConsumerService : IConsumerService
+public class ConsumerService : BackgroundService, IConsumerService
 {
     private readonly IConsumer rabbit;
     private readonly INotificationRepository repository;
@@ -24,8 +25,6 @@ public class ConsumerService : IConsumerService
         repository = repo;
         logger = log;
         localizer = local;
-        
-        rabbit.SubscribeAsync(NotificationCallback);
     }
     
     public async Task<bool> NotificationCallback(string message)
@@ -52,5 +51,12 @@ public class ConsumerService : IConsumerService
         }
 
         return true;
+    }
+
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        rabbit.SubscribeAsync(NotificationCallback);
+        
+        return Task.CompletedTask;
     }
 }

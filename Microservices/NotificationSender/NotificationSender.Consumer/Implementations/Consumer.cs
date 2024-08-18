@@ -19,28 +19,30 @@ public class Consumer : IConsumer
         queue = q;
         
         model = connectionProvider.GetConnection().CreateModel();
+        model.QueueDeclare(queue, true, false, false);
+        model.ExchangeDeclare(exchange, ExchangeType.Direct, true, false);
         model.QueueBind(queue, exchange, routingKey);
     }
 
-    public void SubscribeAsync(Func<string, Task<bool>> callback)
+    public async Task SubscribeAsync(Func<string, Task<bool>> callback)
     {
         AsyncEventingBasicConsumer consumer = new AsyncEventingBasicConsumer(model);
-
-        consumer.Received += async (sender, e) =>
+        
+        consumer.Received += async (ch, ea) =>
         {
-            byte[] body = e.Body.ToArray();
-            string message = Encoding.UTF8.GetString(body);
-            bool success = await callback.Invoke(message);
+            byte[] body = ea.Body.ToArray();
+            string text = Encoding.UTF8.GetString(body);
+            bool result = await callback.Invoke(text);
 
-            if (success)
+            if (result)
             {
-                model.BasicAck(e.DeliveryTag, true);
+                model.BasicAck(ea.DeliveryTag, false);
             }
         };
-
-        model.BasicConsume(queue, true, consumer);
+        
+        model.BasicConsume(queue, false, consumer);
     }
-    
+
     public void Dispose()
     {
         model.Close();

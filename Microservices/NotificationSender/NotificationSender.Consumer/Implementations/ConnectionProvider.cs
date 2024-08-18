@@ -15,6 +15,7 @@ public class ConnectionProvider : IConnectionProvider
             Uri = new Uri(connectionString)
         };
 
+        factory.DispatchConsumersAsync = true;
         connection = factory.CreateConnection();
     }
 
