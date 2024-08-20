@@ -13,6 +13,8 @@ namespace GenericNotification.Application.Service;
 
 public class NotificationService : INotificationService
 {
+    private const string BrokerRoutingKey = "NotificationSend";
+    
     private readonly IStringLocalizer<Resources> localizationMessages;
     private readonly IParser parserService;
     private readonly ILogger<NotificationService> logger;
@@ -54,19 +56,21 @@ public class NotificationService : INotificationService
     public async Task SendNotificationAsync(Notification notification)
     {
         if (IsToday(notification.TimeToSend))
-            await repository.AddToBrokerAsync(notification, "NotificationSend");
+            await repository.AddToBrokerAsync(notification, BrokerRoutingKey);
     }
     
     public async Task<NotificationResponse> CreateNotificationAsync(NotificationDto notificationDto)
     {
-        NotificationResponse notificationResponse = NotificationValidate(notificationDto);
+        List<NotificationStatus> notificationStatus;
         
+        notificationDto.TimeToSend = notificationDto.TimeToSend.ToUniversalTime();
+        NotificationResponse notificationResponse = NotificationValidate(notificationDto);
+           
         if (notificationResponse.Status == ResponseStatus.Error)
         {
             return notificationResponse;
         }
         
-        List<NotificationStatus> notificationStatus;
         Notification notification = new Notification()
         {
             Id = Guid.NewGuid(),
@@ -79,13 +83,13 @@ public class NotificationService : INotificationService
 
         try
         {
-            if (notificationDto.Body == null || (notificationDto.Body != null && notificationDto.File != null))
+            if (notificationDto.TextReceivers == null)
             {
                 notificationStatus = parserService.Parse(notificationDto.File);
             }
             else
             {
-                notificationStatus = parserService.Parse(notificationDto.Body);
+                notificationStatus = parserService.Parse(notificationDto.TextReceivers);
             }
         }
         catch (ArgumentException ex)
@@ -119,7 +123,6 @@ public class NotificationService : INotificationService
     {
         bool isEmail = new EmailAddressAttribute().IsValid(notificationDto.SenderEmail);
         NotificationResponse notificationResponse = new NotificationResponse();
-        notificationDto.TimeToSend =  notificationDto.TimeToSend.ToUniversalTime();
 
         if (notificationDto.TimeToSend < DateTime.UtcNow)
         {
@@ -137,38 +140,40 @@ public class NotificationService : INotificationService
             return notificationResponse;
         }
 
-        if (notificationDto.Body == null && notificationDto.File == null)
+        if (notificationDto.TextReceivers == null && notificationDto.File == null)
         {
             notificationResponse.Message = localizationMessages["SendersError"];
             notificationResponse.Status = ResponseStatus.Error;
 
             return notificationResponse;
         }
-        else
+
+        if (notificationDto.TextReceivers != null && notificationDto.File != null)
         {
-            if (notificationDto.Body != null)
-            {
-                notificationResponse.Status = ResponseStatus.Success;
+            notificationResponse.Message = localizationMessages["FileAndReceiverError"];
+            notificationResponse.Status = ResponseStatus.Error;
 
-                return notificationResponse;
-            }
-            else
-            {
-                if (parserService.FileExtensions.ContainsKey(notificationDto.File.ContentType))
-                {
-                    notificationResponse.Status = ResponseStatus.Success;
-
-                    return notificationResponse;
-                }
-                else
-                {
-                    notificationResponse.Message = localizationMessages["FileFormatError"];
-                    notificationResponse.Status = ResponseStatus.Error;
-
-                    return notificationResponse;
-                }
-            }
+            return notificationResponse;
         }
+        
+        if (notificationDto.TextReceivers != null)
+        {
+            notificationResponse.Status = ResponseStatus.Success;
+
+            return notificationResponse;
+        }
+        
+        if (!parserService.FileExtensions.ContainsKey(notificationDto.File.ContentType))
+        {
+            notificationResponse.Message = localizationMessages["FileFormatError"];
+            notificationResponse.Status = ResponseStatus.Error;
+
+            return notificationResponse;
+        }
+        
+        notificationResponse.Status = ResponseStatus.Success;
+
+        return notificationResponse;
     }
 
     public async Task<NotificationResponse> DeleteNotificationAsync(Guid id)

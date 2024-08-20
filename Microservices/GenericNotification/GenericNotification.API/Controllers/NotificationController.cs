@@ -38,7 +38,6 @@ public class NotificationController : ControllerBase
     [HttpPost]
     public async Task<JsonResult> Post(NotificationDto notification)
     {
-        notification.TimeToSend = notification.TimeToSend.ToUniversalTime();
         NotificationResponse notificationResponse = await notificationService.CreateNotificationAsync(notification);
 
         if (notificationResponse.Status == ResponseStatus.Error)

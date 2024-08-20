@@ -15,6 +15,6 @@ public class NotificationDto
     public string SenderEmail { get; set; }
     [Required]
     public string NotificationText { get; set; }
-    public string Body { get; set; }
+    public string TextReceivers { get; set; }
     public IFormFile File { get; set; }
 }

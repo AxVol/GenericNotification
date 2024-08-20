@@ -6,7 +6,6 @@ using GenericNotification.Domain.Entity;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
 using GenericNotification.Domain.Resources;
-using GenericNotification.Producer.Interfaces;
 using GenericNotification.Tests.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
@@ -26,7 +25,6 @@ public class NotificationServiceTests
         IRepository<Notification> repository = Mock.MockFactory<NotificationService>.GetNotificationRepository();
         IParser parser = Mock.MockFactory<NotificationService>.GetParser();
         localizer = Mock.MockFactory<NotificationService>.GetLocalaizer();
-        IProducer rabbit = Mock.MockFactory<NotificationService>.GetRabbitMq();
 
         notificationService = new NotificationService(localizer, parser, logger, repository);
     }
@@ -43,7 +41,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = "test1@mail.ru test2@mail.ru test3@mail.ru test4@mail.ru test5@mail.ru test6@mail.ru test7@mail.ru",
+            TextReceivers = "test1@mail.ru test2@mail.ru test3@mail.ru test4@mail.ru test5@mail.ru test6@mail.ru test7@mail.ru",
             File = null,
         };
 
@@ -69,7 +67,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -95,7 +93,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -121,7 +119,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -147,7 +145,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -171,7 +169,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123mail.ru",
             NotificationText = "1223",
-            Body = "123@mail.ru",
+            TextReceivers = "123@mail.ru",
             File = null
         };
 
@@ -195,7 +193,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = null
         };
 
@@ -219,7 +217,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = "123@mail.ru",
+            TextReceivers = "123@mail.ru",
             File = null
         };
 
@@ -244,7 +242,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -269,7 +267,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -294,7 +292,7 @@ public class NotificationServiceTests
             TimeToSend = dateTime,
             SenderEmail = "123@mail.ru",
             NotificationText = "1223",
-            Body = null,
+            TextReceivers = null,
             File = await file
         };
 
@@ -311,7 +309,7 @@ public class NotificationServiceTests
     {
         // Arrage
         Guid guid;
-        bool isGuid = Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
+        Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
 
         // Act
         NotificationResponse response = await notificationService.GetNotificationAsync(guid);
@@ -325,7 +323,7 @@ public class NotificationServiceTests
     {
         // Arrage
         Guid guid;
-        bool isGuid = Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
+        Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
 
         // Act
         NotificationResponse response = await notificationService.GetNotificationAsync(guid);
@@ -340,7 +338,7 @@ public class NotificationServiceTests
     {
         // Arrage
         Guid guid;
-        bool isGuid = Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
+        Guid.TryParse("4dfc6b14-7213-3363-8009-b23c56e3a1b1", out guid);
 
         // Act
         NotificationResponse response = await notificationService.DeleteNotificationAsync(guid);
@@ -354,7 +352,7 @@ public class NotificationServiceTests
     {
         // Arrage
         Guid guid;
-        bool isGuid = Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
+        Guid.TryParse("c18f8859-de7a-45f3-9f7f-672b8b64b295", out guid);
 
         // Act
         NotificationResponse response = await notificationService.DeleteNotificationAsync(guid);

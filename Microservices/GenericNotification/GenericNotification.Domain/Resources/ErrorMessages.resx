@@ -36,4 +36,7 @@
     <data name="NotFoundError" xml:space="preserve">
         <value>Нотификация не была найдена</value>
     </data>
+    <data name="FileAndReceiverError" xml:space="preserve">
+        <value>Нельзя загружать одновременно загружать список и файл</value>
+    </data>
 </root>

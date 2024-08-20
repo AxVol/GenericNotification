@@ -11,20 +11,19 @@ namespace GenericNotification.Application.Service;
 public class Parser : IParser
 {
     private readonly IStringLocalizer<Resources> localizer;
-    public Dictionary<string, string> FileExtensions
-    {
-        get => new Dictionary<string, string>()
-        {
-            {"application/vnd.ms-excel", "excel"},
-            {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "excel"},
-            {"application/csv", "csv"},
-            {"text/csv", "csv"}
-        };
-    }
+
+    public Dictionary<string, string> FileExtensions { get; }
 
     public Parser(IStringLocalizer<Resources> stringLocalizer)
     {
         localizer = stringLocalizer;
+        FileExtensions = new Dictionary<string, string>()
+        {
+            { "application/vnd.ms-excel", "excel" },
+            { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "excel" },
+            { "application/csv", "csv" },
+            { "text/csv", "csv" }
+        };
     }
 
     public List<NotificationStatus> Parse(IFormFile file)
