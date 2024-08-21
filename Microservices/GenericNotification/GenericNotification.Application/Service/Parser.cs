@@ -74,13 +74,13 @@ public class Parser : IParser
 
         return notificationList;
     }
-    // TODO рефакторинг
+    
     private List<NotificationStatus> ExcelParse(Stream stream)
     {
         List<NotificationStatus> notificationList;
-        List<string> emails = new List<string>();
-
+        List<string> emails;
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        
         using (ExcelPackage package = new ExcelPackage(stream))
         {
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
@@ -100,20 +100,12 @@ public class Parser : IParser
                 // Парсит только первый столбец
                 if (columnCount == 1)
                 {
-                    for (int i = 1; i <= rowCount; i++)
-                    {
-                        string current = worksheet.Cells[i, columnCount].Value.ToString();
-                        emails.Add(current);
-                    }
+                    emails = ParseEmailInRow(rowCount, worksheet);
                 }
                 // Парсит только первую ячейку всех столбцов
                 else if (rowCount == 1)
                 {
-                    for (int i = 1; i <= columnCount; i++)
-                    {
-                        string current = worksheet.Cells[rowCount, i].Value.ToString();
-                        emails.Add(current);
-                    }
+                    emails = ParseEmailInColumn(columnCount, worksheet);
                 }
                 else
                 {
@@ -123,24 +115,61 @@ public class Parser : IParser
             else
             {
                 // Парсит полноценную таблицу
-                for (int row = 1; row <= rowCount; row++)
-                {
-                    for (int column = 1; column <= columnCount; column++)
-                    {
-                        var current = worksheet.Cells[row, column].Value;
-                        
-                        if (current is null)
-                            continue;
-                        
-                        emails.Add(current.ToString());
-                    }
-                }
+                emails = ParseFullTable(columnCount, rowCount, worksheet);
             }
 
             notificationList = GetEmails(emails);
         }
 
         return notificationList;
+    }
+
+    private List<string> ParseEmailInRow(int row, ExcelWorksheet worksheet)
+    {
+        List<string> emails = new List<string>();
+        int columnCount = 1;
+        
+        for (int i = 1; i <= row; i++)
+        {
+            string current = worksheet.Cells[i, columnCount].Value.ToString();
+            emails.Add(current);
+        }
+        
+        return emails;
+    }
+
+    private List<string> ParseEmailInColumn(int column, ExcelWorksheet worksheet)
+    {
+        List<string> emails = new List<string>();
+        int rowCount = 1;
+        
+        for (int i = 1; i <= column; i++)
+        {
+            string current = worksheet.Cells[rowCount, i].Value.ToString();
+            emails.Add(current);
+        }
+
+        return emails;
+    }
+
+    private List<string> ParseFullTable(int columnCount, int rowCount, ExcelWorksheet worksheet)
+    {
+        List<string> emails = new List<string>();
+
+        for (int row = 1; row <= rowCount; row++)
+        {
+            for (int column = 1; column <= columnCount; column++)
+            {
+                var current = worksheet.Cells[row, column].Value;
+                        
+                if (current is null)
+                    continue;
+                        
+                emails.Add(current.ToString());
+            }
+        }
+
+        return emails;
     }
 
     private List<NotificationStatus> GetEmails(List<string> emails)
