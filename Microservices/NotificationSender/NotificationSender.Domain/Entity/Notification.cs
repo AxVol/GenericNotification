@@ -12,14 +12,6 @@ public class Notification : IEntityId<Guid>
     public bool IsSend { get; set; }
     public List<NotificationStatus> ForUsers { get; set; }
     public string CreatorName { get; set; }
-    public int CountNotifications { get; private set; } = -1;
+    public int CountNotifications { get; set; }
     public NotificationState NotificationState { get; set; }
-    
-    public void SetNotificaitonCount(int count)
-    {
-        if (CountNotifications != -1)
-            return;
-
-        CountNotifications = count;
-    }
 }

@@ -32,7 +32,7 @@ public class ProcessedController
     [HttpGet]
     public async Task<IActionResult> GetProcessedUsers(Guid id, DateTime publishDate)
     {
-        NotificationDto notification = new NotificationDto(){ Id = id, PublishDate = publishDate };
+        NotificationDto notification = new NotificationDto(){ Id = id, PublishDate = publishDate.ToUniversalTime() };
         UsersProcessedResponse notificationResponse = await notificationService.GetProcessedUsersAsync(notification);
     
         if (notificationResponse.Status == ResponseStatus.Success)

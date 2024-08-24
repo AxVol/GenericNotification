@@ -38,7 +38,7 @@ public class NotificationController
     [HttpGet]
     public async Task<IActionResult> GetNotificationState(Guid id, DateTime publishDate)
     {
-        NotificationDto notification = new NotificationDto(){ Id = id, PublishDate = publishDate };
+        NotificationDto notification = new NotificationDto(){ Id = id, PublishDate = publishDate.ToUniversalTime() };
         NotificationStateResponse notificationState = await notificationService.GetNotificationStateAsync(notification);
 
         if (notificationState.Status == ResponseStatus.Success)

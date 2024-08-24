@@ -68,8 +68,8 @@ public class CheckNotificationTimeHostedService : BackgroundService
                 logger.LogError(ex.Message);
                 return;
             }
-            await repository.DeleteAsync(notification);
             await DeleteNotificationFromDb(notification.Id);
+            await repository.DeleteAsync(notification);
         }
         await repository.DeleteByDate(dateTime);
     }

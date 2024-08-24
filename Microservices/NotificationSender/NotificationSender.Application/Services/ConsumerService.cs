@@ -37,7 +37,7 @@ public class ConsumerService : BackgroundService, IConsumerService
             return false;
         }
 
-        notification.SetNotificaitonCount(notification.ForUsers.Count);
+        notification.CountNotifications = notification.ForUsers.Count;
         notification.NotificationState = NotificationState.NotStarted;
         logger.LogInformation($"Notification Added, uuid - {notification.Id}");
 
