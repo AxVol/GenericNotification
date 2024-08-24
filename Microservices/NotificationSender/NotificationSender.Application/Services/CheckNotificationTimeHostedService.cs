@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Net;
+using System.Net.Http.Json;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NotificationSender.Application.Interfaces;
@@ -17,6 +19,7 @@ public class CheckNotificationTimeHostedService : BackgroundService
     private readonly INotificationSenderService notificationSenderService;
     
     private const int IntervalInMinutes = 1;
+    private const string Url = "https://localhost:7125/api";
 
     public CheckNotificationTimeHostedService(ILogger<CheckNotificationTimeHostedService> log, 
         IServiceScopeFactory factory)
@@ -50,7 +53,6 @@ public class CheckNotificationTimeHostedService : BackgroundService
             seconds
         );
         Dictionary<string, Notification> notifications = await repository.GetAllByDate(dateTime);
-        await repository.DeleteByDate(dateTime);
 
         foreach (KeyValuePair<string, Notification> valuePair in notifications)
         {
@@ -64,6 +66,27 @@ public class CheckNotificationTimeHostedService : BackgroundService
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
+                return;
+            }
+            await repository.DeleteAsync(notification);
+            await DeleteNotificationFromDb(notification.Id);
+        }
+        await repository.DeleteByDate(dateTime);
+    }
+
+    private async Task DeleteNotificationFromDb(Guid id)
+    {
+        string deleteUrl = $"{Url}/Notification/{id.ToString()}";
+
+        using (HttpClient client = new HttpClient())
+        {
+            var response = await client.DeleteAsync(deleteUrl);
+
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                string? error = await response.Content.ReadFromJsonAsync<string>();
+                
+                logger.LogError(error);
             }
         }
     }

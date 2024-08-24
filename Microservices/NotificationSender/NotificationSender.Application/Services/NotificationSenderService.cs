@@ -14,12 +14,12 @@ namespace NotificationSender.Application.Services;
 
 public class NotificationSenderService : INotificationSenderService
 {
-    private const int mailPort = 25;
+    private const int MailPort = 25;
     
     private readonly ILogger<NotificationSenderService> logger;
     private readonly IStringLocalizer<Resources> localizer;
     private readonly INotificationRepository repository;
-    
+
     private readonly string appMail;
     private readonly string mailHost;
     private readonly string password;
@@ -30,19 +30,20 @@ public class NotificationSenderService : INotificationSenderService
     {
         logger = log;
         localizer = localize;
+        repository = rep;
         appMail = config["AppMail"];
         mailHost = config["MailHost"];
         password = config["Password"];
-        repository = rep;
     }
     
     public async Task SendNotificationAsync(Notification notification)
     {
         notification.NotificationState = NotificationState.InProgress;
+        await repository.UpdateAsync(notification);
 
         using (SmtpClient client = new SmtpClient())
         {
-            await client.ConnectAsync(mailHost, mailPort, false);
+            await client.ConnectAsync(mailHost, MailPort, false);
             await client.AuthenticateAsync(appMail, password);
 
             using (MimeMessage emailMessage = new MimeMessage())
@@ -63,6 +64,8 @@ public class NotificationSenderService : INotificationSenderService
                     try
                     {
                         await client.SendAsync(emailMessage);
+                        notification.ForUsers.Remove(notificationForSend);
+                        await repository.UpdateAsync(notification);
                     }
                     catch (Exception ex)
                     {
