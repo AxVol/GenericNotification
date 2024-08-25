@@ -13,7 +13,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
         builder.Property(x => x.Body).IsRequired().HasMaxLength(300);
         builder.Property(x => x.CreatorName).IsRequired();
         builder.Property(x => x.TimeToSend).IsRequired();
-        builder.Property(x => x.IsSend).IsRequired();
+        builder.Property(x => x.NotificationState).IsRequired();
         builder.HasMany<NotificationStatus>(x => x.ForUsers);
 
     }

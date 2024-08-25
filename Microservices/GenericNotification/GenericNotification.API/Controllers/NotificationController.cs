@@ -1,5 +1,6 @@
 ﻿using GenericNotification.Application.Interfaces;
 using GenericNotification.Domain.DTO;
+using GenericNotification.Domain.Entity;
 using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,6 @@ public class NotificationController : ControllerBase
     ///         "Title": "string", // Название нотификации
     ///         "Body": "string", // Содержание нотификации
     ///         "TimeToSend": DateTime, // Время запланированной публикации
-    ///         "IsSend": bool, // Статус нотификации, True - Отправлена полностью. False - Не отправлена
     ///         "ForUsers" : List
     ///         {
     ///              "id": uuid,
@@ -75,6 +75,12 @@ public class NotificationController : ControllerBase
     ///              "SendStatus": bool // Статус нотификации для конкретного пользователя
     ///         }
     ///         "CreatorName": "string" Создатель нотификации
+    ///         "NotificationState": Enum // Статус нотификации
+    ///          {
+    ///             NotStarted,
+    ///             InProgress,
+    ///             Finished
+    ///          }
     ///     }
     /// </remarks>
     /// <response code="200">Данные успешно отправлены</response>
@@ -82,14 +88,14 @@ public class NotificationController : ControllerBase
     [HttpGet]
     public async Task<JsonResult> Get(Guid id)
     {
-        NotificationResponse notification = await notificationService.GetNotificationAsync(id);
+        NotificationResponse notificationResponse = await notificationService.GetNotificationAsync(id);
 
-        if (notification.Status == ResponseStatus.Error)
+        if (notificationResponse.Status == ResponseStatus.Error)
         {
-            return new JsonResult(notification.Message);
+            return new JsonResult(notificationResponse.Message);
         }
 
-        return new JsonResult(notification);
+        return new JsonResult(notificationResponse.Value);
     }
 
     /// <remarks>
@@ -105,11 +111,51 @@ public class NotificationController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
-        NotificationResponse notification = await notificationService.DeleteNotificationAsync(id);
+        NotificationResponse notificationResponse = await notificationService.DeleteNotificationAsync(id);
 
-        if (notification.Status == ResponseStatus.Error)
+        if (notificationResponse.Status == ResponseStatus.Error)
         {
-            return new JsonResult(notification.Message);
+            return new JsonResult(notificationResponse.Message);
+        }
+
+        return Ok();
+    }
+
+    /// <remarks>
+    /// Эндпоинт для изменения существующей нотификации, принимает измененную нотификацию, после чего записывает её
+    /// изменения в базу, возвращает статус транзакции
+    /// 
+    ///     PUT /Notification
+    ///     {
+    ///         "id": uuid,
+    ///         "Title": string // Название нотификатции
+    ///         "Body": string // Содержание нотификации
+    ///         "TimeToSend": DateTime // Время отправки нотификации
+    ///         "ForUsers": List
+    ///         {
+    ///              "id": uuid,
+    ///              "Email": "string", // Адрес для отправки нотификации
+    ///              "SendStatus": bool // Статус нотификации для конкретного пользователя
+    ///         }
+    ///         "CreatorName": "string" Создатель нотификации
+    ///         "NotificationState": Enum // Статус нотификации
+    ///          {
+    ///             NotStarted,
+    ///             InProgress,
+    ///             Finished
+    ///          }
+    ///     }
+    /// </remarks>
+    /// <response code="200">Данные успешно обновлены</response>
+    /// <response code="400">Для большей инофрмации об ошибке, смотрите описание ошибки в json файле</response>
+    [HttpPut]
+    public async Task<IActionResult> Update(Notification notification)
+    {
+        NotificationResponse notificationResponse = await notificationService.UpdateNotificationAsync(notification);
+
+        if (notificationResponse.Status == ResponseStatus.Error)
+        {
+            return new JsonResult(notificationResponse.Message);
         }
 
         return Ok();

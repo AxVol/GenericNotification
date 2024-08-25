@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NotificationSender.Application.Interfaces;
 using NotificationSender.DAL.Repository.Interfaces;
+using NotificationSender.Domain.Emun;
 using NotificationSender.Domain.Entity;
+using NotificationSender.Domain.Dto;
 
 namespace NotificationSender.Application.Services;
 
@@ -57,7 +59,11 @@ public class CheckNotificationTimeHostedService : BackgroundService
         foreach (KeyValuePair<string, Notification> valuePair in notifications)
         {
             Notification notification = valuePair.Value;
-            
+            notification.NotificationState = NotificationState.InProgress;
+
+            await repository.UpdateAsync(notification);
+            await UpdateNotificationOnServer(notification);
+
             try
             {
                 logger.LogInformation($"Sending notification with uuid - {notification.Id}");
@@ -66,22 +72,41 @@ public class CheckNotificationTimeHostedService : BackgroundService
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
-                return;
             }
-            await DeleteNotificationFromDb(notification.Id);
             await repository.DeleteAsync(notification);
+
+            notification.NotificationState = NotificationState.Finished;
+            await UpdateNotificationOnServer(notification);
         }
         await repository.DeleteByDate(dateTime);
     }
 
-    private async Task DeleteNotificationFromDb(Guid id)
+    private async Task UpdateNotificationOnServer(Notification notification)
     {
-        string deleteUrl = $"{Url}/Notification/{id.ToString()}";
-
+        UpdateNotificationDto notificationDto = new UpdateNotificationDto()
+        {
+            Id = notification.Id,
+            Title = notification.Title,
+            Body = notification.Body,
+            TimeToSend = notification.TimeToSend,
+            ForUsers = notification.ForUsers,
+            CreatorName = notification.CreatorName,
+            NotificationState = notification.NotificationState,
+        };
+        string updateUrl = $"{Url}/Notification";
+        JsonContent json = JsonContent.Create(notificationDto);
+        
         using (HttpClient client = new HttpClient())
         {
-            var response = await client.DeleteAsync(deleteUrl);
+            HttpRequestMessage request = new HttpRequestMessage()
+            {
+                Content = json,
+                Method = HttpMethod.Put,
+                RequestUri = new Uri(updateUrl)
+            };
 
+            var response = await client.SendAsync(request);
+            
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 string? error = await response.Content.ReadFromJsonAsync<string>();

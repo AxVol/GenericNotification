@@ -38,9 +38,6 @@ public class NotificationSenderService : INotificationSenderService
     
     public async Task SendNotificationAsync(Notification notification)
     {
-        notification.NotificationState = NotificationState.InProgress;
-        await repository.UpdateAsync(notification);
-
         using (SmtpClient client = new SmtpClient())
         {
             await client.ConnectAsync(mailHost, MailPort, false);
@@ -55,8 +52,9 @@ public class NotificationSenderService : INotificationSenderService
                     Text = notification.Body
                 };
 
-                foreach (NotificationStatus notificationForSend in notification.ForUsers)
+                for (int i = 0; i < notification.ForUsers.Count; i++)
                 {
+                    NotificationStatus notificationForSend = notification.ForUsers[i];
                     logger.LogInformation($"Sending notification to user with id {notificationForSend.Id}");
                     
                     emailMessage.To.Add(new MailboxAddress("", notificationForSend.Email));

@@ -44,7 +44,6 @@ public static class MockFactory<T> where T : class
             Title = "test",
             Body = "test",
             TimeToSend = DateTime.Now.ToUniversalTime(),
-            IsSend = false,
             ForUsers = new List<NotificationStatus>()
             {
                 new NotificationStatus()
@@ -57,7 +56,7 @@ public static class MockFactory<T> where T : class
             CreatorName = "test",
             NotificationState = NotificationState.NotStarted,
         };
-        notification.SetNotificaitonCount(3);
+        notification.CountNotifications = 3;
         
         return notification;
     }

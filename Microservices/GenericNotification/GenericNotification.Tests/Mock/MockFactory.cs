@@ -2,6 +2,7 @@
 using GenericNotification.Application.Service;
 using GenericNotification.DAL.Repository.Interfaces;
 using GenericNotification.Domain.Entity;
+using GenericNotification.Domain.Enum;
 using GenericNotification.Domain.Resources;
 using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.Localization;
@@ -80,9 +81,9 @@ public class MockFactory<T> where T : class
             Title = "test",
             Body = "test",
             TimeToSend = DateTime.Now.ToUniversalTime(),
-            IsSend = false,
             ForUsers = new List<NotificationStatus>(),
-            CreatorName = "test"
+            CreatorName = "test",
+            NotificationState = NotificationState.NotStarted
         };
 
         notifications.Add(notification);

@@ -77,8 +77,8 @@ public class NotificationService : INotificationService
             Title = notificationDto.Title,
             TimeToSend = notificationDto.TimeToSend,
             Body = notificationDto.NotificationText,
-            IsSend = false,
-            CreatorName = notificationDto.SenderEmail
+            CreatorName = notificationDto.SenderEmail,
+            NotificationState = NotificationState.NotStarted
         };
 
         try
@@ -115,6 +115,41 @@ public class NotificationService : INotificationService
         notificationResponse.Value = notification;
 
         await repository.CreateAsync(notification);
+        
+        return notificationResponse;
+    }
+
+    public async Task<NotificationResponse> UpdateNotificationAsync(Notification newNotification)
+    {
+        NotificationResponse notificationResponse = new NotificationResponse();
+        Notification? notification = repository.GetAll().FirstOrDefault(n => n.Id == newNotification.Id);
+
+        if (notification is null)
+        {
+            notificationResponse.Status = ResponseStatus.Error;
+            notificationResponse.Message = localizationMessages["NotFoundError"];
+
+            return notificationResponse;
+        }
+
+        if (notification.NotificationState == NotificationState.InProgress)
+        {
+            notificationResponse.Status = ResponseStatus.Error;
+            notificationResponse.Message = localizationMessages["NotificationInProgress"];
+
+            return notificationResponse;
+        }
+        
+        notificationResponse.Status = ResponseStatus.Success;
+        notification.Id = newNotification.Id;
+        notification.Title = newNotification.Title;
+        notification.Body = newNotification.Body;
+        notification.TimeToSend = newNotification.TimeToSend;
+        notification.ForUsers = newNotification.ForUsers;
+        notification.CreatorName = newNotification.CreatorName;
+        notification.NotificationState = newNotification.NotificationState;
+
+        await repository.UpdateAsync(notification);
         
         return notificationResponse;
     }
