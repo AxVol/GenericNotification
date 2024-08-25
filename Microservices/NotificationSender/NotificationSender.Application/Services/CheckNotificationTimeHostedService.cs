@@ -12,7 +12,8 @@ using NotificationSender.Domain.Dto;
 namespace NotificationSender.Application.Services;
 
 /// <summary>
-/// 
+/// Фоновая служба которая каждую минуту проверяет редис на наличие нотификаций для отправки в данную минуту, и в
+/// случае их наличия, запускает процесс отправки
 /// </summary>
 public class CheckNotificationTimeHostedService : BackgroundService
 {
