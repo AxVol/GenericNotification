@@ -2,6 +2,7 @@
 using GenericNotification.Producer.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using RabbitMQ.Client;
 
 namespace GenericNotification.Producer.DependencyInjection;
 
@@ -11,10 +12,11 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("RabbitMQ");
         string exchange = configuration["Exchange"];
+        string exchangeType = ExchangeType.Direct.ToString();
 
         serviceCollection.AddSingleton<IConnectionProvider>(new ConnectionProvider(connectionString));
         serviceCollection.AddScoped<IProducer>(p => new Implementations.Producer(p.GetService<IConnectionProvider>(),
-            exchange));
+            exchange, exchangeType));
         
         return serviceCollection;
     }
