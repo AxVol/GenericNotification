@@ -22,7 +22,7 @@ public class CheckNotificationTimeHostedService : BackgroundService
     private readonly INotificationSenderService notificationSenderService;
     
     private const int IntervalInMinutes = 1;
-    private const string Url = "https://localhost:7125/api";
+    private const string Url = "https://genericnotification:7125/api";
 
     public CheckNotificationTimeHostedService(ILogger<CheckNotificationTimeHostedService> log, 
         IServiceScopeFactory factory)

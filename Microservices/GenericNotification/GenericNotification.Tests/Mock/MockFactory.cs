@@ -63,7 +63,7 @@ public class MockFactory<T> where T : class
     public static IProducer GetRabbitMq()
     {
         var mock = new Mock<IProducer>();
-        mock.Setup(m => m.Publish("message", "routingKey")).Returns(Task.CompletedTask);
+        mock.Setup(m => m.Publish("message", "routingKey", "300000")).Returns(Task.CompletedTask);
 
         return mock.Object;
     }

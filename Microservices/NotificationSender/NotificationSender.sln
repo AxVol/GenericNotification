@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.API", "NotificationSender.API\NotificationSender.API.csproj", "{B35CDB6F-9A97-4E34-B959-F242B6F792F4}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.API", "NotificationSender.API\NotificationSender.API.csproj", "{B35CDB6F-9A97-4E34-B959-F242B6F792F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{1B4176B1-0D8B-45BD-9BEB-7104819F7AB0}"
 EndProject
@@ -8,17 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{88A74CF3-74B4-4D24-8216-7FE8E4344B4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Domain", "NotificationSender.Domain\NotificationSender.Domain.csproj", "{D33C223C-CF1E-4C81-AE9E-0B498033EE47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.Domain", "NotificationSender.Domain\NotificationSender.Domain.csproj", "{D33C223C-CF1E-4C81-AE9E-0B498033EE47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Application", "NotificationSender.Application\NotificationSender.Application.csproj", "{F6D56419-2450-4581-BFAB-ADF4B77DA238}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.Application", "NotificationSender.Application\NotificationSender.Application.csproj", "{F6D56419-2450-4581-BFAB-ADF4B77DA238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.DAL", "NotificationSender.DAL\NotificationSender.DAL.csproj", "{F934A247-7ABD-48AE-8E3C-576C7A06EDD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.DAL", "NotificationSender.DAL\NotificationSender.DAL.csproj", "{F934A247-7ABD-48AE-8E3C-576C7A06EDD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Consumer", "NotificationSender.Consumer\NotificationSender.Consumer.csproj", "{D7979475-611F-4C5D-BBB3-90B3D1BD1B87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.Consumer", "NotificationSender.Consumer\NotificationSender.Consumer.csproj", "{D7979475-611F-4C5D-BBB3-90B3D1BD1B87}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CC5F6271-7F78-421A-A8B1-E170FB13B4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationSender.Tests", "NotificationSender.Tests\NotificationSender.Tests.csproj", "{2E615FA5-5ACD-41DD-8089-3E527DC3EDE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationSender.Tests", "NotificationSender.Tests\NotificationSender.Tests.csproj", "{2E615FA5-5ACD-41DD-8089-3E527DC3EDE0}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2029D2D5-4286-4683-AAC5-599B404B1AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +55,13 @@ Global
 		{2E615FA5-5ACD-41DD-8089-3E527DC3EDE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E615FA5-5ACD-41DD-8089-3E527DC3EDE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E615FA5-5ACD-41DD-8089-3E527DC3EDE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2029D2D5-4286-4683-AAC5-599B404B1AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2029D2D5-4286-4683-AAC5-599B404B1AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2029D2D5-4286-4683-AAC5-599B404B1AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2029D2D5-4286-4683-AAC5-599B404B1AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B35CDB6F-9A97-4E34-B959-F242B6F792F4} = {33FD4882-9990-4FCA-B03C-15662BAA4EF3}

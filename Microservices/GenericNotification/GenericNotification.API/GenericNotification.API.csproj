@@ -8,6 +8,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>GenericNotification</RootNamespace>
         <UserSecretsId>2d71708e-739d-40c3-a831-b756edc8555a</UserSecretsId>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

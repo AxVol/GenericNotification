@@ -1,0 +1,78 @@
+version: "3,9"
+
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "genericnotificationdb"
+      POSTGRES_USER: "GenericNotification"
+      POSTGRES_PASSWORD: "StrongPassword"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+      TZ: "utc"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  redis:
+    container_name: redis
+    image: redis:6-alpine
+    ports: 
+      - "6379:6379"
+    environment:
+      - TZ="utc"
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.13.3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=StrongPassword
+      - TZ="utc"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+  genericnotification:
+    container_name: genericnotification
+    build:
+      context: Microservices/GenericNotification/
+      dockerfile: Dockerfile
+    ports:
+      - "5056:5056"
+      - "7125:7125"
+    environment:
+      - Kestrel__Certificates__Default__Path=/root/.aspnet/https/genericnotification.pfx
+      - Kestrel__Certificates__Default__Password=StrongPassword
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7125;http://+:5056
+      - TZ="utc"
+    volumes:
+      - ./Microservices/cert:/root/.aspnet/https:ro
+    depends_on:
+      - rabbitmq
+      - postgresql
+  notificationsender:
+    container_name: notificationsender
+    build: 
+      context: Microservices/NotificationSender/
+      dockerfile: Dockerfile
+    ports:
+      - "5126:5126"
+      - "7022:7022"
+    environment:
+      - Kestrel__Certificates__Default__Path=/root/.aspnet/https/notificationsender.pfx
+      - Kestrel__Certificates__Default__Password=StrongPassword
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:7022;http://+:5126
+      - TZ="utc"
+    volumes:
+      - ./Microservices/cert:/root/.aspnet/https:ro
+    depends_on:
+      - rabbitmq
+      - redis
+
+volumes:
+  postgres-data:
+  rabbitmq:

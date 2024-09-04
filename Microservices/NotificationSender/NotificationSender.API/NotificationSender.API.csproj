@@ -10,12 +10,14 @@
         <UserSecretsId>fcdba1da-9705-4fea-b543-6ed2a7e234f7</UserSecretsId>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <DocumentationFile>bin\Debug\NotificationSender.API.xml</DocumentationFile>
+        <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.6" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
