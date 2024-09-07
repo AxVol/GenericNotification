@@ -4,6 +4,7 @@ services:
   postgresql:
     container_name: postgresql
     image: postgres:16
+    restart: always
     ports:
       - "5432:5432"
     environment:
@@ -17,6 +18,7 @@ services:
   redis:
     container_name: redis
     image: redis:6-alpine
+    restart: always
     ports: 
       - "6379:6379"
     environment:
@@ -24,6 +26,7 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.13.3-management
+    restart: always
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -36,6 +39,7 @@ services:
       - rabbitmq:/var/lib/rabbitmq
   genericnotification:
     container_name: genericnotification
+    restart: always
     build:
       context: Microservices/GenericNotification/
       dockerfile: Dockerfile
@@ -55,6 +59,7 @@ services:
       - postgresql
   notificationsender:
     container_name: notificationsender
+    restart: always
     build: 
       context: Microservices/NotificationSender/
       dockerfile: Dockerfile
